@@ -4,9 +4,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-
-
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/core'
 import { useRouter } from 'next/router'
 import {
@@ -15,13 +13,12 @@ import {
   MdFavorite,
   MdHome,
   MdMenu,
-  MdSearch
+  MdSearch,
 } from 'react-icons/md'
 import DrawerItem from './DrawerItem'
 import MobileDrawer from './MobileDrawer'
 import NavItem, { NavItemProps } from './NavItem'
 import SideNav from './SideNav'
-
 
 export const menus: NavItemProps[] = [
   { href: '/', icon: MdHome, name: 'Home' },
