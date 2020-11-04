@@ -1,23 +1,12 @@
-import {
-  Flex,
-  IconButton,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  useDisclosure,
-} from '@chakra-ui/core'
+import { Tag, TagCloseButton, TagLabel, useDisclosure } from '@chakra-ui/core'
+import useTags from '@root/hooks/useTags'
 import { useRouter } from 'next/router'
-import {
-  MdAccountCircle,
-  MdAdd,
-  MdFavorite,
-  MdHome,
-  MdMenu,
-  MdSearch,
-} from 'react-icons/md'
+import { MdAccountCircle, MdFavorite, MdHome } from 'react-icons/md'
 import DrawerItem from './DrawerItem'
 import MobileDrawer from './MobileDrawer'
-import NavItem, { NavItemProps } from './NavItem'
+import MobileTopNav from './MobileTopNav'
+import { NavItemProps } from './NavItem'
+import SearchBar from './SearchBar'
 import SideNav from './SideNav'
 
 export const menus: NavItemProps[] = [
@@ -29,65 +18,15 @@ export const menus: NavItemProps[] = [
 const Navbar = () => {
   const { pathname } = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { tags, removeTag } = useTags(['Bogor', 'Yogyakarta', 'Mamamia'])
 
   return (
     <>
-      <SideNav>
-        {menus.map(({ href, icon, name }) => (
-          <NavItem
-            key={href}
-            active={href === pathname}
-            icon={icon}
-            href={href}
-            name={name}
-          />
-        ))}
-      </SideNav>
+      <SideNav menus={menus} />
+      <SearchBar tags={tags} removeTag={removeTag} />
 
-      <Flex
-        backgroundColor='red.500'
-        justify='center'
-        paddingY='2'
-        color='white'
-        display={['flex', 'flex', 'none', 'none']}
-      >
-        <IconButton
-          aria-label='Test'
-          icon={MdMenu}
-          marginRight='auto'
-          variant='ghost'
-          variantColor='red.500'
-          fontSize='2xl'
-          onClick={onOpen}
-        />
-        <InputGroup color='black'>
-          <InputLeftElement fontSize='2xl'>
-            <MdSearch />
-          </InputLeftElement>
-          <Input placeholder='Cari tempat wisata...' />
-        </InputGroup>
-        <IconButton
-          aria-label='Test'
-          icon={MdAdd}
-          marginLeft='auto'
-          variant='ghost'
-          variantColor='red.500'
-          fontSize='2xl'
-        />
-      </Flex>
-
-      <MobileDrawer isOpen={isOpen} onClose={onClose}>
-        {menus.map(({ href, icon, name }) => (
-          <DrawerItem
-            href={href}
-            icon={icon}
-            key={href}
-            active={href === pathname}
-          >
-            {name}
-          </DrawerItem>
-        ))}
-      </MobileDrawer>
+      <MobileTopNav onMenuClick={onOpen} tags={tags} removeTag={removeTag} />
+      <MobileDrawer isOpen={isOpen} onClose={onClose} menus={menus} />
     </>
   )
 }

@@ -1,7 +1,15 @@
 import { Box, Flex } from '@chakra-ui/core'
+import { useRouter } from 'next/router'
 import { FC } from 'react'
+import NavItem, { NavItemProps } from './NavItem'
 
-const SideNav: FC = ({ children }) => {
+export type SideNavProps = {
+  menus: NavItemProps[]
+}
+
+const SideNav: FC<SideNavProps> = ({ menus }) => {
+  const { pathname } = useRouter()
+
   return (
     <Box
       height='100vh'
@@ -15,7 +23,15 @@ const SideNav: FC = ({ children }) => {
         justify='space-around'
         align='center'
       >
-        {children}
+        {menus.map(({ href, icon, name }) => (
+          <NavItem
+            key={href}
+            active={href === pathname}
+            icon={icon}
+            href={href}
+            name={name}
+          />
+        ))}
       </Flex>
     </Box>
   )
