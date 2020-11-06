@@ -1,11 +1,11 @@
 import { Button, Flex, Text } from '@chakra-ui/core'
 import { EmailInput, PasswordInput } from '@root/components'
+import useLoading from '@root/hooks/useLoading'
 import classes from '@styles/Login.module.css'
 import { NextPage } from 'next'
-import { useState } from 'react'
 
 const Register: NextPage = () => {
-  const [isLoading, setLoading] = useState(false)
+  const { isLoading, startLoading } = useLoading(false)
 
   return (
     <Flex alignItems='center' justifyContent='center' height='100vh'>
@@ -23,7 +23,7 @@ const Register: NextPage = () => {
           marginTop='2'
           type='submit'
           isLoading={isLoading}
-          onClick={e => setLoading(true)}
+          onClick={startLoading}
         >
           Register
         </Button>

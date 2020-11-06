@@ -1,12 +1,12 @@
 import { Button, Flex, Text } from '@chakra-ui/core'
 import { EmailInput, LinkWrapper, PasswordInput } from '@root/components'
+import useLoading from '@root/hooks/useLoading'
 import classes from '@styles/Login.module.css'
 import { NextPage } from 'next'
-import { useState } from 'react'
 import { FaGoogle } from 'react-icons/fa'
 
 const Login: NextPage = () => {
-  const [isLoading, setLoading] = useState(false)
+  const { isLoading, startLoading } = useLoading(false)
 
   return (
     <Flex alignItems='center' justifyContent='center' height='100vh'>
@@ -23,7 +23,7 @@ const Login: NextPage = () => {
           width='full'
           marginTop='2'
           type='submit'
-          onClick={() => setLoading(true)}
+          onClick={startLoading}
         >
           Login
         </Button>
@@ -37,7 +37,7 @@ const Login: NextPage = () => {
           color='white'
           width='full'
           leftIcon={FaGoogle}
-          onClick={() => setLoading(true)}
+          onClick={startLoading}
         >
           Google
         </Button>
