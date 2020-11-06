@@ -16,6 +16,7 @@ const SideNav: FC<SideNavProps> = ({ menus }) => {
       width='72px'
       backgroundColor='red.500'
       display={['none', 'none', 'block', 'block']}
+      position='fixed'
     >
       <Flex
         direction='column'

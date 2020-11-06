@@ -18,12 +18,13 @@ export type SearchBarProps = {
 const SearchBar: FC<SearchBarProps> = ({ tags, removeTag }) => {
   return (
     <Flex
-      position='absolute'
+      position='fixed'
       top='0'
       right='0'
       marginTop='2'
       marginRight='6'
       display={['none', 'none', 'flex', 'flex']}
+      zIndex={999}
     >
       <Stack spacing={2} isInline marginRight='4'>
         {tags.map(tag => (
