@@ -13,12 +13,12 @@
     "@emotion/core": "^10.1.1",
     "@emotion/styled": "^10.0.27",
     "emotion-theming": "^10.0.27",
+    "masonic": "^3.3.10",
     "next": "10.0.0",
     "next-on-netlify": "^2.6.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-icons": "^3.11.0",
-    "react-virtualized": "^9.22.2",
     "recoil": "^0.1.2"
   },
   "devDependencies": {
