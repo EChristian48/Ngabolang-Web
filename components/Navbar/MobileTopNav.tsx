@@ -1,28 +1,35 @@
 import {
+  Box,
   Flex,
   IconButton,
+  Input,
   InputGroup,
   InputLeftElement,
-  Input,
-  Box,
   Stack,
-  Tag,
-  TagLabel,
-  TagCloseButton,
 } from '@chakra-ui/core'
-import { Children, FC } from 'react'
-import { MdMenu, MdAdd, MdSearch } from 'react-icons/md'
+import useControlledInput from '@root/hooks/useControlledInput'
+import useTags from '@root/hooks/useTags'
+import { FC, FormEvent } from 'react'
+import { MdAdd, MdMenu, MdSearch } from 'react-icons/md'
 import LocationTag from './LocationTag'
-import { SearchBarProps } from './SearchBar'
 
 export type MobileTopNavProps = { onMenuClick: () => void }
 
-const MobileTopNav: FC<MobileTopNavProps & SearchBarProps> = ({
-  children,
-  onMenuClick,
-  removeTag,
-  tags,
-}) => {
+const MobileTopNav: FC<MobileTopNavProps> = ({ onMenuClick }) => {
+  const { tags, addTag } = useTags()
+  const [value, handler, clear] = useControlledInput()
+  
+  function formHandler(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (!tags.includes(value) && value) {
+      addTag(value)
+      clear()
+    } else {
+      console.log('Tag udah ada!')
+      ;(function showModal() {})()
+    }
+  }
+
   return (
     <>
       <Flex
@@ -41,20 +48,26 @@ const MobileTopNav: FC<MobileTopNavProps & SearchBarProps> = ({
           fontSize='2xl'
           onClick={onMenuClick}
         />
-        <InputGroup color='black'>
-          <InputLeftElement fontSize='2xl'>
-            <MdSearch />
-          </InputLeftElement>
-          <Input placeholder='Cari tempat wisata...' />
-        </InputGroup>
-        <IconButton
-          aria-label='Test'
-          icon={MdAdd}
-          marginLeft='auto'
-          variant='ghost'
-          variantColor='red.500'
-          fontSize='2xl'
-        />
+        <form onSubmit={formHandler}>
+          <InputGroup color='black'>
+            <InputLeftElement fontSize='2xl'>
+              <MdSearch />
+            </InputLeftElement>
+            <Input
+              placeholder='Cari tempat wisata...'
+              value={value}
+              onChange={handler}
+            />
+          </InputGroup>
+          <IconButton
+            aria-label='Test'
+            icon={MdAdd}
+            marginLeft='auto'
+            variant='ghost'
+            variantColor='red.500'
+            fontSize='2xl'
+          />
+        </form>
       </Flex>
 
       <Box maxWidth='100wh' overflowX='hidden'>
@@ -66,7 +79,7 @@ const MobileTopNav: FC<MobileTopNavProps & SearchBarProps> = ({
         >
           <Stack spacing={1} isInline>
             {tags.map(tag => (
-              <LocationTag size='lg' onClose={() => removeTag(tag)} key={tag}>
+              <LocationTag size='lg' key={tag}>
                 {tag}
               </LocationTag>
             ))}

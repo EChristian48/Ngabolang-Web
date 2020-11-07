@@ -1,8 +1,5 @@
-import { Tag, TagCloseButton, TagLabel, useDisclosure } from '@chakra-ui/core'
-import useTags from '@root/hooks/useTags'
-import { useRouter } from 'next/router'
+import { useDisclosure } from '@chakra-ui/core'
 import { MdAccountCircle, MdFavorite, MdHome } from 'react-icons/md'
-import DrawerItem from './DrawerItem'
 import MobileDrawer from './MobileDrawer'
 import MobileTopNav from './MobileTopNav'
 import { NavItemProps } from './NavItem'
@@ -16,16 +13,14 @@ export const menus: NavItemProps[] = [
 ]
 
 const Navbar = () => {
-  const { pathname } = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { tags, removeTag } = useTags(['Bogor', 'Yogyakarta', 'Mamamia'])
 
   return (
     <>
       <SideNav menus={menus} />
-      <SearchBar tags={tags} removeTag={removeTag} />
+      <SearchBar />
 
-      <MobileTopNav onMenuClick={onOpen} tags={tags} removeTag={removeTag} />
+      <MobileTopNav onMenuClick={onOpen} />
       <MobileDrawer isOpen={isOpen} onClose={onClose} menus={menus} />
     </>
   )

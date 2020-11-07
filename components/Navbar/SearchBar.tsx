@@ -5,17 +5,28 @@ import {
   InputLeftElement,
   Stack,
 } from '@chakra-ui/core'
-import React, { FC } from 'react'
+import useControlledInput from '@root/hooks/useControlledInput'
+import useTags from '@root/hooks/useTags'
+import { FormEvent } from 'react'
 import { MdSearch } from 'react-icons/md'
 import HiddenSubmit from './HiddenSubmit'
 import LocationTag from './LocationTag'
 
-export type SearchBarProps = {
-  tags: string[]
-  removeTag: (tag: string) => void
-}
+const SearchBar = () => {
+  const { tags, addTag } = useTags()
+  const [value, handler, clear] = useControlledInput()
 
-const SearchBar: FC<SearchBarProps> = ({ tags, removeTag }) => {
+  function formHandler(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (!tags.includes(value) && value) {
+      addTag(value)
+      clear()
+    } else {
+      console.log('Tag udah ada!')
+      ;(function showModal() {})()
+    }
+  }
+
   return (
     <Flex
       position='fixed'
@@ -28,17 +39,21 @@ const SearchBar: FC<SearchBarProps> = ({ tags, removeTag }) => {
     >
       <Stack spacing={2} isInline marginRight='4'>
         {tags.map(tag => (
-          <LocationTag size='lg' onClose={() => removeTag(tag)} key={tag}>
+          <LocationTag size='lg' key={tag}>
             {tag}
           </LocationTag>
         ))}
       </Stack>
-      <form>
+      <form onSubmit={formHandler}>
         <InputGroup color='black'>
           <InputLeftElement fontSize='2xl'>
             <MdSearch />
           </InputLeftElement>
-          <Input placeholder='Cari tempat wisata...' />
+          <Input
+            placeholder='Cari tempat wisata...'
+            onChange={handler}
+            value={value}
+          />
         </InputGroup>
         <HiddenSubmit />
       </form>

@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { tags } from '@root/state/tags'
+import { useRecoilState } from 'recoil'
 
-export default function useTags(defaultTags: string[] = []) {
-  const [tags, setTags] = useState(defaultTags)
+export default function useTags() {
+  const [tagsState, setTagsState] = useRecoilState(tags)
 
-  const addTag = (tag: string) => setTags([...tags, tag])
+  const addTag = (tag: string) => setTagsState([...tagsState, tag])
   const removeTag = (tag: string) =>
-    setTags(tags.filter(value => value !== tag))
+    setTagsState(tagsState.filter(value => value !== tag))
 
   return {
-    tags,
+    tags: tagsState,
     addTag,
     removeTag,
   }
