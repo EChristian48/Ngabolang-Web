@@ -18,7 +18,7 @@ export type MobileTopNavProps = { onMenuClick: () => void }
 const MobileTopNav: FC<MobileTopNavProps> = ({ onMenuClick }) => {
   const { tags, addTag } = useTags()
   const [value, handler, clear] = useControlledInput()
-  
+
   function formHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!tags.includes(value) && value) {
@@ -59,15 +59,15 @@ const MobileTopNav: FC<MobileTopNavProps> = ({ onMenuClick }) => {
               onChange={handler}
             />
           </InputGroup>
-          <IconButton
-            aria-label='Test'
-            icon={MdAdd}
-            marginLeft='auto'
-            variant='ghost'
-            variantColor='red.500'
-            fontSize='2xl'
-          />
         </form>
+        <IconButton
+          aria-label='Test'
+          icon={MdAdd}
+          marginLeft='auto'
+          variant='ghost'
+          variantColor='red.500'
+          fontSize='2xl'
+        />
       </Flex>
 
       <Box maxWidth='100wh' overflowX='hidden'>
