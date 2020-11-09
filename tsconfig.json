@@ -21,7 +21,8 @@
       "@helper/*": ["./helpers/*"],
       "@hooks/*": ["./hooks/*"],
       "@data/*": ["./data/*"],
-      "@state/*": ["./state/*"]
+      "@state/*": ["./state/*"],
+      "@firebase/*": ["./firebase/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
