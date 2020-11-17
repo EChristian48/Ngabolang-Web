@@ -1,19 +1,11 @@
-export class User {
-  constructor(
-    public uid: string,
-    public username: string,
-    private favorites: Post[] = []
-  ) {}
+import firebase from 'firebase'
 
-  removeFavorites(id: string) {
-    this.favorites = this.favorites.filter(post => post.id !== id)
-  }
-}
+export type User = Pick<
+  firebase.User,
+  'displayName' | 'email' | 'uid' | 'photoURL'
+>
 
 export type Post = {
-  id: string
-  uid: string
-  username: string
   url: string
   location: string
-}
+} & Pick<User, 'uid' | 'displayName'>

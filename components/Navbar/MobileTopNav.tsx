@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/core'
 import useControlledInput from '@root/hooks/useControlledInput'
 import useTags from '@root/hooks/useTags'
+import { useRouter } from 'next/router'
 import { FC, FormEvent } from 'react'
 import { MdAdd, MdMenu, MdSearch } from 'react-icons/md'
 import LocationTag from './LocationTag'
@@ -16,6 +17,7 @@ import LocationTag from './LocationTag'
 export type MobileTopNavProps = { onMenuClick: () => void }
 
 const MobileTopNav: FC<MobileTopNavProps> = ({ onMenuClick }) => {
+  const { pathname } = useRouter()
   const { tags, addTag } = useTags()
   const [value, handler, clear] = useControlledInput()
 
@@ -43,13 +45,19 @@ const MobileTopNav: FC<MobileTopNavProps> = ({ onMenuClick }) => {
           aria-label='Test'
           icon={MdMenu}
           marginRight='auto'
+          marginLeft='2'
           variant='ghost'
           variantColor='red.500'
           fontSize='2xl'
           onClick={onMenuClick}
         />
         <form onSubmit={formHandler}>
-          <InputGroup color='black'>
+          <InputGroup
+            color='black'
+            display={
+              pathname === '/' || pathname === '/favorites' ? 'block' : 'none'
+            }
+          >
             <InputLeftElement fontSize='2xl'>
               <MdSearch />
             </InputLeftElement>
@@ -64,6 +72,7 @@ const MobileTopNav: FC<MobileTopNavProps> = ({ onMenuClick }) => {
           aria-label='Test'
           icon={MdAdd}
           marginLeft='auto'
+          marginRight='2'
           variant='ghost'
           variantColor='red.500'
           fontSize='2xl'

@@ -2,11 +2,11 @@ import useToggler from '@root/hooks/useToggler'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import router from 'next/router'
-import React, { FC, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import LoadingScreen from './LoadingScreen'
 
-const MustBeSignedOut: FC = ({ children }) => {
+const NeedAuth: FC = ({ children }) => {
   const [isRedirecting, startRedirect] = useToggler(false)
   const [user, loading] = useAuthState(firebase.auth()) as [
     firebase.User,
@@ -15,19 +15,19 @@ const MustBeSignedOut: FC = ({ children }) => {
   ]
 
   useEffect(() => {
-    if (user) {
+    if (!user && !loading) {
       startRedirect()
-      router.replace('/')
+      router.replace('/login')
     }
-  }, [user])
+  }, [user, loading])
 
   return loading ? (
     <LoadingScreen />
   ) : isRedirecting ? (
-    <LoadingScreen>Redirecting...</LoadingScreen>
+    <LoadingScreen>Who the hell are you?</LoadingScreen>
   ) : (
     <>{children}</>
   )
 }
 
-export default MustBeSignedOut
+export default NeedAuth

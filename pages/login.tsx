@@ -1,5 +1,4 @@
 import { Button, Flex, Text, useToast } from '@chakra-ui/core'
-import { firebase } from '@firebase/client'
 import {
   EmailInput,
   LinkWrapper,
@@ -9,7 +8,7 @@ import {
 import useControlledInput from '@root/hooks/useControlledInput'
 import useLoading from '@root/hooks/useLoading'
 import classes from '@styles/Login.module.css'
-import 'firebase/auth'
+import firebase from 'firebase/app'
 import { NextPage } from 'next'
 import { FormEvent } from 'react'
 import { FaGoogle } from 'react-icons/fa'

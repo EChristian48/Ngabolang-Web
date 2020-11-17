@@ -9,19 +9,20 @@
     "start": "next start"
   },
   "dependencies": {
-    "@chakra-ui/core": "^0.8.0",
-    "@emotion/core": "^10.1.1",
-    "@emotion/styled": "^10.0.27",
-    "emotion-theming": "^10.0.27",
-    "firebase": "^8",
-    "masonic": "^3.3.10",
+    "@chakra-ui/core": "x",
+    "@emotion/core": "x",
+    "@emotion/styled": "x",
+    "emotion-theming": "x",
+    "firebase": "x",
+    "masonic": "x",
+    "molohooks": "x",
     "next": "10.0.0",
-    "next-on-netlify": "^2.6.0",
-    "react": "^17",
-    "react-dom": "^17",
+    "next-on-netlify": "x",
+    "react": "17",
+    "react-dom": "17",
     "react-firebase-hooks": "^2.2.0",
-    "react-icons": "^3.11.0",
-    "recoil": "^0.1.2"
+    "react-icons": "x",
+    "recoil": "x"
   },
   "devDependencies": {
     "@types/node": "^14.14.6",

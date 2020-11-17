@@ -12,5 +12,3 @@ if (!firebase.apps.length) {
     measurementId: 'G-GX4XWSKVQX',
   })
 }
-
-export { firebase }

@@ -1,4 +1,5 @@
 import { CSSReset, ThemeProvider } from '@chakra-ui/core'
+import '@firebase/init'
 import theme from '@root/chakra.theme'
 import { AppProps } from 'next/app'
 import { RecoilRoot } from 'recoil'

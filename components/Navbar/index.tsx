@@ -1,5 +1,5 @@
 import { useDisclosure } from '@chakra-ui/core'
-import { MdAccountCircle, MdFavorite, MdHome } from 'react-icons/md'
+import { MdAccountCircle, MdAdd, MdFavorite, MdHome } from 'react-icons/md'
 import MobileDrawer from './MobileDrawer'
 import MobileTopNav from './MobileTopNav'
 import { NavItemProps } from './NavItem'
@@ -10,6 +10,7 @@ export const menus: NavItemProps[] = [
   { href: '/', icon: MdHome, name: 'Home' },
   { href: '/favorites', icon: MdFavorite, name: 'Favorites' },
   { href: '/profile', icon: MdAccountCircle, name: 'Profile' },
+  { href: '/upload', icon: MdAdd, name: 'Upload' },
 ]
 
 const Navbar = () => {

@@ -1,12 +1,11 @@
 import { Button, Flex, Text, useToast } from '@chakra-ui/core'
 import { EmailInput, MustBeSignedOut, PasswordInput } from '@root/components'
+import useControlledInput from '@root/hooks/useControlledInput'
 import useLoading from '@root/hooks/useLoading'
 import classes from '@styles/Login.module.css'
+import firebase from 'firebase/app'
 import { NextPage } from 'next'
 import { FormEvent } from 'react'
-import { firebase } from '@firebase/client'
-import 'firebase/auth'
-import useControlledInput from '@root/hooks/useControlledInput'
 
 const Register: NextPage = () => {
   const { isLoading, startLoading, stopLoading } = useLoading(false)

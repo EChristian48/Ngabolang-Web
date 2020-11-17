@@ -7,12 +7,14 @@ import {
 } from '@chakra-ui/core'
 import useControlledInput from '@root/hooks/useControlledInput'
 import useTags from '@root/hooks/useTags'
+import { useRouter } from 'next/router'
 import { FormEvent } from 'react'
 import { MdSearch } from 'react-icons/md'
 import HiddenSubmit from './HiddenSubmit'
 import LocationTag from './LocationTag'
 
 const SearchBar = () => {
+  const { pathname } = useRouter()
   const { tags, addTag } = useTags()
   const [value, handler, clear] = useControlledInput()
 
@@ -34,7 +36,11 @@ const SearchBar = () => {
       right='0'
       marginTop='2'
       marginRight='6'
-      display={['none', 'none', 'flex', 'flex']}
+      display={
+        pathname === '/' || pathname === '/favorites'
+          ? ['none', 'none', 'flex', 'flex']
+          : ['none', 'none', 'none', 'none']
+      }
       zIndex={999}
     >
       <Stack spacing={2} isInline marginRight='4'>

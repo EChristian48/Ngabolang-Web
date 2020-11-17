@@ -1,4 +1,4 @@
-import { Tag, TagLabel, TagCloseButton } from '@chakra-ui/core'
+import { Tag, TagCloseButton, TagLabel } from '@chakra-ui/core'
 import useTags from '@root/hooks/useTags'
 import { FC } from 'react'
 
