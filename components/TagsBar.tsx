@@ -13,7 +13,7 @@ export default function TagsBar() {
   const { tags, removeTag } = useTags()
 
   return (
-    <Center position='fixed' bottom={4} width='full'>
+    <Center position='fixed' bottom={4} width='full' zIndex={99}>
       <Wrap justify='center'>
         {tags.map(tag => (
           <WrapItem key={tag}>
