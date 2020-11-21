@@ -45,7 +45,7 @@ export default function TopBar({
   ]
 
   const { addTag, tags } = useTags()
-  const [searchValue, searchHandler] = useInputHandler()
+  const [searchValue, searchHandler, clearSearch] = useInputHandler()
 
   function validateSearch() {
     if (tags.includes(searchValue)) throw new Error('Tag sudah ada!')
@@ -63,6 +63,7 @@ export default function TopBar({
     try {
       validateSearch()
       addTag(searchValue)
+      clearSearch()
     } catch (e) {
       toast({
         title: e.message,
