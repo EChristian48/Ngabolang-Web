@@ -16,7 +16,7 @@ export default function TagsBar() {
     <Center position='fixed' bottom={4} width='full'>
       <Wrap justify='center'>
         {tags.map(tag => (
-          <WrapItem>
+          <WrapItem key={tag}>
             <SlideFade in offsetY={-20}>
               <Tag size='lg'>
                 <TagLabel>{tag}</TagLabel>

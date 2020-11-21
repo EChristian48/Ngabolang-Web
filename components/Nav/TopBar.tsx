@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react'
 import { MenuType } from '@root/data/menu'
 import useTags from '@root/hooks/useTags'
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 import { useInputHandler } from 'molohooks'
 import React, { FormEvent } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -53,6 +53,10 @@ export default function TopBar({
 
   const toast = useToast()
 
+  function logout() {
+    firebase.auth().signOut()
+  }
+
   function onSubmit(e: FormEvent<HTMLDivElement>) {
     e.preventDefault()
 
@@ -80,7 +84,7 @@ export default function TopBar({
         <HStack marginRight='auto' marginLeft={2}>
           {isMediumScreen &&
             topMenus.map(({ href, label }) => (
-              <LinkWrapper nextProps={{ href }}>
+              <LinkWrapper nextProps={{ href }} key={label}>
                 <Button>{label}</Button>
               </LinkWrapper>
             ))}
@@ -106,11 +110,11 @@ export default function TopBar({
             <Portal>
               <MenuList>
                 {profileMenus.map(({ href, label }) => (
-                  <MenuItem as='a' href={href}>
+                  <MenuItem as='a' href={href} key={label}>
                     {label}
                   </MenuItem>
                 ))}
-                <MenuItem>Logout</MenuItem>
+                <MenuItem onClick={logout}>Logout</MenuItem>
               </MenuList>
             </Portal>
           </Menu>

@@ -38,6 +38,7 @@ export default function CustomDrawer({
                 <LinkWrapper
                   nextProps={{ href }}
                   chakraProps={{ width: 'full' }}
+                  key={label}
                 >
                   <Button isFullWidth>{label}</Button>
                 </LinkWrapper>
