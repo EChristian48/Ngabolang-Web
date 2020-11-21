@@ -8,9 +8,12 @@ export default function useTags() {
   const removeTag = (tag: string) =>
     setTagsState(tagsState.filter(value => value !== tag))
 
+  const clearTags = () => setTagsState([])
+
   return {
     tags: tagsState,
     addTag,
     removeTag,
+    clearTags,
   }
 }

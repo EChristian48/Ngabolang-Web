@@ -1,22 +1,21 @@
-import { Button, Flex, Text, useToast } from '@chakra-ui/core'
+import { Button, Flex, Text, useToast } from '@chakra-ui/react'
 import {
   EmailInput,
   LinkWrapper,
   MustBeSignedOut,
   PasswordInput,
 } from '@root/components'
-import useControlledInput from '@root/hooks/useControlledInput'
-import useLoading from '@root/hooks/useLoading'
 import classes from '@styles/Login.module.css'
 import firebase from 'firebase/app'
+import { useInputHandler, useToggler } from 'molohooks'
 import { NextPage } from 'next'
 import { FormEvent } from 'react'
 import { FaGoogle } from 'react-icons/fa'
 
 const Login: NextPage = () => {
-  const { isLoading, startLoading, stopLoading } = useLoading(false)
-  const [emailValue, emailHandler] = useControlledInput()
-  const [passValue, passHandler] = useControlledInput()
+  const [isLoading, startLoading, stopLoading] = useToggler()
+  const [emailValue, emailHandler] = useInputHandler()
+  const [passValue, passHandler] = useInputHandler()
 
   const failedToast = useToast()
 
@@ -72,7 +71,7 @@ const Login: NextPage = () => {
             backgroundColor='blue.500'
             color='white'
             width='full'
-            leftIcon={FaGoogle}
+            leftIcon={<FaGoogle />}
             onClick={loginWithGoogle}
           >
             Google

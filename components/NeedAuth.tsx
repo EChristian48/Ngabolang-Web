@@ -1,4 +1,4 @@
-import useToggler from '@root/hooks/useToggler'
+import { useToggler } from 'molohooks'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import router from 'next/router'

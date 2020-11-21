@@ -1,13 +1,7 @@
 import {
   Avatar,
   Button,
-  Center,
   Container,
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
   Flex,
   HStack,
   IconButton,
@@ -20,28 +14,19 @@ import {
   MenuItem,
   MenuList,
   Portal,
-  SlideFade,
-  Tag,
-  TagCloseButton,
-  TagLabel,
-  useDisclosure,
   useMediaQuery,
   useToast,
-  VStack,
-  Wrap,
-  WrapItem,
 } from '@chakra-ui/react'
 import { LinkWrapper } from '@root/components'
-import NeedAuth from '@root/components/NeedAuth'
 import { drawerMenus, profileMenus, topNavMenus } from '@root/data/menu'
-import { MdMenu, MdSearch } from 'react-icons/md'
-import { useAuthState } from 'react-firebase-hooks/auth'
+import useTags from '@root/hooks/useTags'
 import firebase from 'firebase/app'
 import { useInputHandler, useToggler } from 'molohooks'
-import useTags from '@root/hooks/useTags'
 import { FormEvent } from 'react'
-
-export default function Home() {
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { MdMenu, MdSearch } from 'react-icons/md'
+import CustomDrawer from './Drawer'
+export default function Nav() {
   const [isMediumScreen] = useMediaQuery('(min-width: 48em)')
   const [user] = useAuthState(firebase.auth()) as [
     firebase.User,
@@ -74,7 +59,7 @@ export default function Home() {
   }
 
   return (
-    <NeedAuth>
+    <>
       <Container maxWidth={['100%', , '80%']}>
         <Flex
           height={['60px', , '80px']}
@@ -129,40 +114,12 @@ export default function Home() {
           )}
         </Flex>
       </Container>
-      <Center position='fixed' bottom={4} width='full'>
-        <Wrap justify='center'>
-          {tags.map(tag => (
-            <WrapItem>
-              <SlideFade in offsetY={-20}>
-                <Tag size='lg'>
-                  <TagLabel>{tag}</TagLabel>
-                  <TagCloseButton onClick={() => removeTag(tag)} />
-                </Tag>
-              </SlideFade>
-            </WrapItem>
-          ))}
-        </Wrap>
-      </Center>
-      <Drawer isOpen={isDrawerOpen} onClose={closeDrawer}>
-        <DrawerOverlay>
-          <DrawerContent>
-            <DrawerHeader>Mau ke mana?</DrawerHeader>
 
-            <DrawerBody>
-              <VStack>
-                {drawerMenus.map(({ href, label }) => (
-                  <LinkWrapper
-                    nextProps={{ href }}
-                    chakraProps={{ width: 'full' }}
-                  >
-                    <Button isFullWidth>{label}</Button>
-                  </LinkWrapper>
-                ))}
-              </VStack>
-            </DrawerBody>
-          </DrawerContent>
-        </DrawerOverlay>
-      </Drawer>
-    </NeedAuth>
+      <CustomDrawer
+        isOpem={isDrawerOpen}
+        menus={drawerMenus}
+        onClose={closeDrawer}
+      />
+    </>
   )
 }

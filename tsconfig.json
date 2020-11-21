@@ -18,11 +18,9 @@
       "@root/*": ["./*"],
       "@styles/*": ["./styles/*"],
       "@components/*": ["./components/*"],
-      "@helper/*": ["./helpers/*"],
       "@hooks/*": ["./hooks/*"],
       "@data/*": ["./data/*"],
-      "@state/*": ["./state/*"],
-      "@firebase/*": ["./firebase/*"]
+      "@state/*": ["./state/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

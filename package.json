@@ -9,11 +9,11 @@
     "start": "next start"
   },
   "dependencies": {
-    "@chakra-ui/core": "x",
-    "@emotion/core": "x",
+    "@chakra-ui/react": "^1.0.1",
+    "@emotion/react": "^11.1.1",
     "@emotion/styled": "x",
-    "emotion-theming": "x",
     "firebase": "x",
+    "framer-motion": "^2.9.4",
     "masonic": "x",
     "molohooks": "x",
     "next": "10.0.0",

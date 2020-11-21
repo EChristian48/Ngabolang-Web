@@ -1,4 +1,4 @@
-import { Flex, Spinner } from '@chakra-ui/core'
+import { Flex, Spinner } from '@chakra-ui/react'
 import { FC } from 'react'
 
 const LoadingScreen: FC = ({ children }) => {

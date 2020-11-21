@@ -1,4 +1,4 @@
-import { Input, InputProps } from '@chakra-ui/core'
+import { Input, InputProps } from '@chakra-ui/react'
 
 const EmailInput = (props: InputProps) => (
   <Input

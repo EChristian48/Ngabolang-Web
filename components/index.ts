@@ -1,7 +1,5 @@
 export { default as LinkWrapper } from './LinkWrapper'
 export { default as EmailInput } from './EmailInput'
 export { default as PasswordInput } from './PasswordInput'
-export { default as Navbar } from './Navbar'
-export { default as Layout } from './Layout'
 export { default as LoadingScreen } from './LoadingScreen'
 export { default as MustBeSignedOut } from './MustBeSignedOut'

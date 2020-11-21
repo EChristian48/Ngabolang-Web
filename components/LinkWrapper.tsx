@@ -1,4 +1,4 @@
-import { Link, LinkProps } from '@chakra-ui/core'
+import { Link, LinkProps } from '@chakra-ui/react'
 import NextLink, { LinkProps as NextLinkProps } from 'next/link'
 import { FC } from 'react'
 

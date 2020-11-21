@@ -1,4 +1,4 @@
-import { firebase } from '@root/firebase/init'
+import firebase from 'firebase/app'
 import 'firebase/auth'
 
 export default function gening() {

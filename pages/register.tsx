@@ -1,17 +1,16 @@
-import { Button, Flex, Text, useToast } from '@chakra-ui/core'
+import { Button, Flex, Text, useToast } from '@chakra-ui/react'
 import { EmailInput, MustBeSignedOut, PasswordInput } from '@root/components'
-import useControlledInput from '@root/hooks/useControlledInput'
-import useLoading from '@root/hooks/useLoading'
 import classes from '@styles/Login.module.css'
 import firebase from 'firebase/app'
+import { useInputHandler, useToggler } from 'molohooks'
 import { NextPage } from 'next'
 import { FormEvent } from 'react'
 
 const Register: NextPage = () => {
-  const { isLoading, startLoading, stopLoading } = useLoading(false)
-  const [emailValue, emailHandler] = useControlledInput()
-  const [passValue, passHandler] = useControlledInput()
-  const [confPassValue, confPassHandler] = useControlledInput()
+  const [isLoading, startLoading, stopLoading] = useToggler()
+  const [emailValue, emailHandler] = useInputHandler()
+  const [passValue, passHandler] = useInputHandler()
+  const [confPassValue, confPassHandler] = useInputHandler()
 
   const failedToast = useToast()
 
@@ -47,13 +46,8 @@ const Register: NextPage = () => {
 
   return (
     <MustBeSignedOut>
-      <Flex
-        alignItems='center'
-        justifyContent='center'
-        height='100vh'
-        onSubmit={signUp}
-      >
-        <form className={classes.loginForm}>
+      <Flex alignItems='center' justifyContent='center' height='100vh'>
+        <form className={classes.loginForm} onSubmit={signUp}>
           <Text fontSize='2xl' marginBottom='2'>
             Register
           </Text>
