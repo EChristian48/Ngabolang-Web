@@ -55,7 +55,7 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
   )
 
   return (
-    <Drawer {...drawerProps} placement='bottom' size='full'>
+    <Drawer {...drawerProps} placement='left' size='full'>
       <DrawerOverlay>
         <DrawerContent>
           <DrawerCloseButton />
