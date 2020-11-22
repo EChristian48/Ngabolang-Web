@@ -35,8 +35,10 @@ const Login: NextPage = () => {
     }
   }
 
-  const loginWithEmail = (e: FormEvent<HTMLFormElement>) =>
+  const loginWithEmail = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     login(firebase.auth().signInWithEmailAndPassword(emailValue, passValue))
+  }
 
   const loginWithGoogle = () =>
     login(

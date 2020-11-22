@@ -1,4 +1,5 @@
 import firebase from 'firebase/app'
+import { type } from 'os'
 
 export type User = Pick<
   firebase.User,
@@ -8,5 +9,9 @@ export type User = Pick<
 export type Post = {
   url: string
   location: string
-  date: firebase.firestore.FieldValue
+  date: firebase.firestore.FieldValue | firebase.firestore.Timestamp
 } & Pick<User, 'uid'>
+
+export type FavoritePost = Post & {
+  id: string
+}
