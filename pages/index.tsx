@@ -3,7 +3,6 @@ import {
   Container,
   Flex,
   IconButton,
-  Portal,
   Spinner,
   Text,
 } from '@chakra-ui/react'
@@ -12,15 +11,15 @@ import ImageDrawer from '@root/components/ImageDrawer'
 import Nav from '@root/components/Nav'
 import NeedAuth from '@root/components/NeedAuth'
 import TagsBar from '@root/components/TagsBar'
+import usePagination from '@root/hooks/usePagination'
+import useTags from '@root/hooks/useTags'
+import classes from '@styles/Masonry.module.css'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import { Masonry, RenderComponentProps } from 'masonic'
 import { useToggler } from 'molohooks'
-import { memo, MouseEvent, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md'
-import classes from '@styles/Masonry.module.css'
-import useTags from '@root/hooks/useTags'
-import usePagination from '@root/hooks/usePagination'
 
 const pageSize = 20
 // const pageWithOffset = pageSize + 1
