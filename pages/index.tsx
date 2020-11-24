@@ -19,6 +19,7 @@ import { useToggler } from 'molohooks'
 import { memo, MouseEvent, useCallback, useEffect, useState } from 'react'
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md'
 import classes from '@styles/Masonry.module.css'
+import useTags from '@root/hooks/useTags'
 
 const pageSize = 20
 const MasonicMemo = memo(Masonry)
@@ -38,16 +39,32 @@ export default function Home() {
   const [canGoNext, enableNext, disableNext] = useToggler(true)
   const [canGoPrev, enablePrev, disablePrev] = useToggler(false)
 
+  const { tags } = useTags()
+
   async function nextPage() {
     startLoading()
+
+    const query = tags.length
+      ? firebase
+          .firestore()
+          .collection('posts')
+          .where(
+            'location',
+            'in',
+            tags.map(tag => tag.toUpperCase())
+          )
+          .orderBy('date', 'desc')
+          .startAfter(lastDoc)
+          .limit(pageSize + 1)
+      : firebase
+          .firestore()
+          .collection('posts')
+          .orderBy('date', 'desc')
+          .startAfter(lastDoc)
+          .limit(pageSize + 1)
+
     setPage(page => page + 1)
-    const snapshot = await firebase
-      .firestore()
-      .collection('posts')
-      .orderBy('date', 'desc')
-      .startAfter(lastDoc)
-      .limit(pageSize + 1)
-      .get()
+    const snapshot = await query.get()
 
     if (snapshot.docs.length < pageSize + 1) {
       disableNext()
@@ -62,16 +79,28 @@ export default function Home() {
 
   async function prevPage() {
     startLoading()
-    setPage(page => page - 1)
-    const snapshot = await firebase
-      .firestore()
-      .collection('posts')
-      .orderBy('date', 'desc')
-      .endBefore(firstDoc)
-      .limitToLast(pageSize + 1)
-      .get()
 
-    console.log(snapshot.docs)
+    const query = tags.length
+      ? firebase
+          .firestore()
+          .collection('posts')
+          .where(
+            'location',
+            'in',
+            tags.map(tag => tag.toUpperCase())
+          )
+          .orderBy('date', 'desc')
+          .endBefore(firstDoc)
+          .limitToLast(pageSize + 1)
+      : firebase
+          .firestore()
+          .collection('posts')
+          .orderBy('date', 'desc')
+          .endBefore(firstDoc)
+          .limitToLast(pageSize + 1)
+
+    setPage(page => page - 1)
+    const snapshot = await query.get()
 
     if (snapshot.docs.length < pageSize + 1) {
       disablePrev()
@@ -89,11 +118,44 @@ export default function Home() {
     setFirstDoc(posts[0])
   }, [posts])
 
-  const firstQuery = firebase
-    .firestore()
-    .collection('posts')
-    .orderBy('date', 'desc')
-    .limit(pageSize)
+  const firstQuery = tags.length
+    ? firebase
+        .firestore()
+        .collection('posts')
+        .where(
+          'location',
+          'in',
+          tags.map(tag => tag.toUpperCase())
+        )
+        .orderBy('date', 'desc')
+        .limit(pageSize)
+    : firebase
+        .firestore()
+        .collection('posts')
+        .orderBy('date', 'desc')
+        .limit(pageSize)
+
+  async function loadSearch() {
+    startLoading()
+    const snapshot = await firebase
+      .firestore()
+      .collection('posts')
+      .where(
+        'location',
+        'in',
+        tags.map(tag => tag.toUpperCase())
+      )
+      .orderBy('date', 'desc')
+      .limit(pageSize)
+      .get()
+    setPosts(snapshot.docs)
+    disablePrev()
+    stopLoading()
+  }
+
+  useEffect(() => {
+    tags.length ? loadSearch() : firstLoad()
+  }, [tags])
 
   async function firstLoad() {
     startLoading()

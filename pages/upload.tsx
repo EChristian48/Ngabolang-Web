@@ -71,7 +71,7 @@ const Upload: NextPage = () => {
 
       const post: Post = {
         uid,
-        location,
+        location: location.toUpperCase(),
         url: downloadUrl,
         date: firebase.firestore.FieldValue.serverTimestamp(),
       }

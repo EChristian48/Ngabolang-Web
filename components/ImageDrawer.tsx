@@ -20,7 +20,7 @@ import { format } from 'date-fns'
 import firebase from 'firebase/app'
 import { useToggler } from 'molohooks'
 import { FC, useEffect, useState } from 'react'
-import { MdFavorite } from 'react-icons/md'
+import { MdDelete, MdFavorite } from 'react-icons/md'
 
 export type ImageDrawerProps = Omit<DrawerProps, 'children'> & {
   post: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
@@ -28,31 +28,88 @@ export type ImageDrawerProps = Omit<DrawerProps, 'children'> & {
 
 const ImageDrawer: FC<ImageDrawerProps> = props => {
   const { post, ...drawerProps } = props
-  const [isLoadingUser, , stopLoading] = useToggler(true)
-  const [user, setUser] = useState<User>()
+  const [
+    isLoadingUploader,
+    startLoadingUploader,
+    stopLoadingUploader,
+  ] = useToggler(true)
+  const [uploader, setUploader] = useState<User>()
+  const [isLoading, , stopLoading] = useToggler(true)
+  const [isDisabled, disableButton, enableButton] = useToggler()
+  const [userData, setUserData] = useState<User>()
+  const [alreadyFav, setAlreadyFav, removeAlreadyFav] = useToggler()
 
   const postData = post.data() as Post
 
-  async function loadUser() {
-    if (!firebase.firestore()) await import('firebase/firestore')
+  async function loadUploader() {
+    startLoadingUploader()
     const snapshot = await firebase
       .firestore()
       .collection('users')
       .doc(postData.uid)
       .get()
     const user = snapshot.data() as User
-    setUser(user)
-    stopLoading()
+    setUploader(user)
+    stopLoadingUploader()
   }
 
+  async function checkAlreadyFavorite() {
+    removeAlreadyFav()
+    if (userData?.favorites.includes(post.id)) setAlreadyFav()
+  }
+
+  function listenToUserDoc() {
+    const { uid } = firebase.auth().currentUser
+    return firebase
+      .firestore()
+      .collection('users')
+      .doc(uid)
+      .onSnapshot(snapshot => {
+        setUserData(snapshot.data() as User)
+      })
+  }
+
+  useEffect(() => listenToUserDoc(), [])
+
   useEffect(() => {
-    loadUser()
-  }, [])
+    loadUploader()
+  }, [post])
+
+  useEffect(() => {
+    if (userData) stopLoading()
+  }, [userData])
+
+  useEffect(() => {
+    if (userData) {
+      checkAlreadyFavorite()
+    }
+  }, [post, userData])
 
   const date = new firebase.firestore.Timestamp(
     (postData.date as firebase.firestore.Timestamp).seconds,
     (postData.date as firebase.firestore.Timestamp).nanoseconds
   )
+
+  const displayLocation =
+    postData.location[0] + postData.location.slice(1).toLowerCase()
+
+  async function saveToFavorites() {
+    const { uid } = firebase.auth().currentUser
+
+    const data: User = alreadyFav
+      ? {
+          ...userData,
+          favorites: userData.favorites.filter(id => id !== post.id),
+        }
+      : {
+          ...userData,
+          favorites: [...userData.favorites, post.id],
+        }
+
+    await firebase.firestore().collection('users').doc(uid).update(data)
+
+    disableButton()
+  }
 
   return (
     <Drawer {...drawerProps} placement='left' size='full'>
@@ -60,9 +117,9 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            {isLoadingUser
+            {isLoadingUploader
               ? 'Loading info...'
-              : `${postData.location}, ${user.displayName}`}
+              : `${displayLocation}, ${uploader.displayName}`}
           </DrawerHeader>
           <DrawerBody>
             <Container maxWidth={['100%', , '80%']} paddingBottom='32px'>
@@ -82,17 +139,21 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
                 <VStack align='start'>
                   <Button
                     aria-label='Save to favorites'
-                    leftIcon={<MdFavorite />}
+                    leftIcon={alreadyFav ? <MdDelete /> : <MdFavorite />}
                     isFullWidth
+                    onClick={saveToFavorites}
+                    isLoading={isLoading}
                   >
-                    Add to Favorites
+                    {alreadyFav ? 'Remove from Favorites' : 'Add to Favorites'}
                   </Button>
 
-                  <Heading size='lg'>Location: {postData.location}</Heading>
-                  {isLoadingUser ? (
+                  <Heading size='lg'>Location: {displayLocation}</Heading>
+                  {isLoadingUploader ? (
                     <Text>Loading user info...</Text>
                   ) : (
-                    <Text fontSize='lg'>Uploader: {user.displayName}</Text>
+                    <Text fontSize='lg'>
+                      Uploaded by: {uploader.displayName}
+                    </Text>
                   )}
                   <Text>Date: {format(date.toDate(), 'dd MMMM yyyy')}</Text>
                 </VStack>
