@@ -16,10 +16,12 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { Post, User } from '@root/data/types'
+import useListenCurrentUser from '@root/hooks/useListenCurrentUser'
+import useUploaderDoc from '@root/hooks/useUploaderDoc'
 import { format } from 'date-fns'
 import firebase from 'firebase/app'
 import { useToggler } from 'molohooks'
-import { FC, useEffect, useState } from 'react'
+import { FC, memo, useEffect, useState } from 'react'
 import { MdDelete, MdFavorite } from 'react-icons/md'
 
 export type ImageDrawerProps = Omit<DrawerProps, 'children'> & {
@@ -28,87 +30,48 @@ export type ImageDrawerProps = Omit<DrawerProps, 'children'> & {
 
 const ImageDrawer: FC<ImageDrawerProps> = props => {
   const { post, ...drawerProps } = props
-  const [
-    isLoadingUploader,
-    startLoadingUploader,
-    stopLoadingUploader,
-  ] = useToggler(true)
-  const [uploader, setUploader] = useState<User>()
-  const [isLoading, , stopLoading] = useToggler(true)
-  const [isDisabled, disableButton, enableButton] = useToggler()
-  const [userData, setUserData] = useState<User>()
-  const [alreadyFav, setAlreadyFav, removeAlreadyFav] = useToggler()
-
   const postData = post.data() as Post
-
-  async function loadUploader() {
-    startLoadingUploader()
-    const snapshot = await firebase
-      .firestore()
-      .collection('users')
-      .doc(postData.uid)
-      .get()
-    const user = snapshot.data() as User
-    setUploader(user)
-    stopLoadingUploader()
-  }
-
-  async function checkAlreadyFavorite() {
-    removeAlreadyFav()
-    if (userData?.favorites.includes(post.id)) setAlreadyFav()
-  }
-
-  function listenToUserDoc() {
-    const { uid } = firebase.auth().currentUser
-    return firebase
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .onSnapshot(snapshot => {
-        setUserData(snapshot.data() as User)
-      })
-  }
-
-  useEffect(() => listenToUserDoc(), [])
-
-  useEffect(() => {
-    loadUploader()
-  }, [post])
-
-  useEffect(() => {
-    if (userData) stopLoading()
-  }, [userData])
-
-  useEffect(() => {
-    if (userData) {
-      checkAlreadyFavorite()
-    }
-  }, [post, userData])
-
   const date = new firebase.firestore.Timestamp(
     (postData.date as firebase.firestore.Timestamp).seconds,
     (postData.date as firebase.firestore.Timestamp).nanoseconds
   )
-
   const displayLocation =
     postData.location[0] + postData.location.slice(1).toLowerCase()
 
-  async function saveToFavorites() {
+  const [isLoadingUploader, uploader] = useUploaderDoc(postData.uid, post)
+  const [isLoadingCurrentUser, currentUser] = useListenCurrentUser()
+
+  const [
+    isAlreadyFavorite,
+    setAlreadyFavorite,
+    removeAlreadyFavorite,
+  ] = useToggler()
+
+  function checkAlreadyFavorite() {
+    removeAlreadyFavorite()
+    if (currentUser.favorites.includes(post.id)) setAlreadyFavorite()
+  }
+
+  useEffect(() => {
+    if (currentUser) {
+      checkAlreadyFavorite()
+    }
+  }, [post, currentUser])
+
+  async function updateFavorites() {
     const { uid } = firebase.auth().currentUser
 
-    const data: User = alreadyFav
+    const data: User = isAlreadyFavorite
       ? {
-          ...userData,
-          favorites: userData.favorites.filter(id => id !== post.id),
+          ...currentUser,
+          favorites: currentUser.favorites.filter(id => id !== post.id),
         }
       : {
-          ...userData,
-          favorites: [...userData.favorites, post.id],
+          ...currentUser,
+          favorites: [...currentUser.favorites, post.id],
         }
 
     await firebase.firestore().collection('users').doc(uid).update(data)
-
-    disableButton()
   }
 
   return (
@@ -139,12 +102,14 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
                 <VStack align='start'>
                   <Button
                     aria-label='Save to favorites'
-                    leftIcon={alreadyFav ? <MdDelete /> : <MdFavorite />}
+                    leftIcon={isAlreadyFavorite ? <MdDelete /> : <MdFavorite />}
                     isFullWidth
-                    onClick={saveToFavorites}
-                    isLoading={isLoading}
+                    onClick={updateFavorites}
+                    isLoading={isLoadingCurrentUser}
                   >
-                    {alreadyFav ? 'Remove from Favorites' : 'Add to Favorites'}
+                    {isAlreadyFavorite
+                      ? 'Remove from Favorites'
+                      : 'Add to Favorites'}
                   </Button>
 
                   <Heading size='lg'>Location: {displayLocation}</Heading>
@@ -166,4 +131,4 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
   )
 }
 
-export default ImageDrawer
+export default memo(ImageDrawer)

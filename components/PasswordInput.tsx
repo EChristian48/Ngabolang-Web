@@ -1,4 +1,5 @@
 import { Input, InputProps } from '@chakra-ui/react'
+import { memo } from 'react'
 
 const PasswordInput = (props: InputProps) => (
   <Input
@@ -10,4 +11,4 @@ const PasswordInput = (props: InputProps) => (
   />
 )
 
-export default PasswordInput
+export default memo(PasswordInput)

@@ -1,4 +1,5 @@
 import { Input, InputProps } from '@chakra-ui/react'
+import { memo } from 'react'
 
 const EmailInput = (props: InputProps) => (
   <Input
@@ -10,4 +11,4 @@ const EmailInput = (props: InputProps) => (
   />
 )
 
-export default EmailInput
+export default memo(EmailInput)

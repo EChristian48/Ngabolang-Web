@@ -20,153 +20,45 @@ import { memo, MouseEvent, useCallback, useEffect, useState } from 'react'
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md'
 import classes from '@styles/Masonry.module.css'
 import useTags from '@root/hooks/useTags'
+import usePagination from '@root/hooks/usePagination'
 
 const pageSize = 20
+// const pageWithOffset = pageSize + 1
 const MasonicMemo = memo(Masonry)
 
 export default function Home() {
-  const [posts, setPosts] = useState<
-    firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>[]
-  >([])
-  const [lastDoc, setLastDoc] = useState<
-    firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
-  >()
-  const [firstDoc, setFirstDoc] = useState<
-    firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
-  >()
-  const [page, setPage] = useState(1)
-  const [isLoadingPage, startLoading, stopLoading] = useToggler(true)
-  const [canGoNext, enableNext, disableNext] = useToggler(true)
-  const [canGoPrev, enablePrev, disablePrev] = useToggler(false)
-
   const { tags } = useTags()
-
-  async function nextPage() {
-    startLoading()
-
-    const query = tags.length
-      ? firebase
-          .firestore()
-          .collection('posts')
-          .where(
-            'location',
-            'in',
-            tags.map(tag => tag.toUpperCase())
-          )
-          .orderBy('date', 'desc')
-          .startAfter(lastDoc)
-          .limit(pageSize + 1)
-      : firebase
-          .firestore()
-          .collection('posts')
-          .orderBy('date', 'desc')
-          .startAfter(lastDoc)
-          .limit(pageSize + 1)
-
-    setPage(page => page + 1)
-    const snapshot = await query.get()
-
-    if (snapshot.docs.length < pageSize + 1) {
-      disableNext()
-      setPosts(snapshot.docs)
-    } else {
-      setPosts(snapshot.docs.slice(0, -1))
-    }
-
-    enablePrev()
-    stopLoading()
-  }
-
-  async function prevPage() {
-    startLoading()
-
-    const query = tags.length
-      ? firebase
-          .firestore()
-          .collection('posts')
-          .where(
-            'location',
-            'in',
-            tags.map(tag => tag.toUpperCase())
-          )
-          .orderBy('date', 'desc')
-          .endBefore(firstDoc)
-          .limitToLast(pageSize + 1)
-      : firebase
-          .firestore()
-          .collection('posts')
-          .orderBy('date', 'desc')
-          .endBefore(firstDoc)
-          .limitToLast(pageSize + 1)
-
-    setPage(page => page - 1)
-    const snapshot = await query.get()
-
-    if (snapshot.docs.length < pageSize + 1) {
-      disablePrev()
-      setPosts(snapshot.docs)
-    } else {
-      setPosts(snapshot.docs.slice(0, -1))
-    }
-
-    enableNext()
-    stopLoading()
-  }
+  const [query, setQuery] = useState<
+    firebase.firestore.Query<firebase.firestore.DocumentData>
+  >(firebase.firestore().collection('posts').orderBy('date', 'desc'))
 
   useEffect(() => {
-    setLastDoc(posts[posts.length - 1])
-    setFirstDoc(posts[0])
-  }, [posts])
-
-  const firstQuery = tags.length
-    ? firebase
-        .firestore()
-        .collection('posts')
-        .where(
-          'location',
-          'in',
-          tags.map(tag => tag.toUpperCase())
-        )
-        .orderBy('date', 'desc')
-        .limit(pageSize)
-    : firebase
-        .firestore()
-        .collection('posts')
-        .orderBy('date', 'desc')
-        .limit(pageSize)
-
-  async function loadSearch() {
-    startLoading()
-    const snapshot = await firebase
-      .firestore()
-      .collection('posts')
-      .where(
-        'location',
-        'in',
-        tags.map(tag => tag.toUpperCase())
+    if (tags.length) {
+      setQuery(
+        firebase
+          .firestore()
+          .collection('posts')
+          .where(
+            'location',
+            'in',
+            tags.map(tag => tag.toUpperCase())
+          )
+          .orderBy('date', 'desc')
       )
-      .orderBy('date', 'desc')
-      .limit(pageSize)
-      .get()
-    setPosts(snapshot.docs)
-    disablePrev()
-    stopLoading()
-  }
-
-  useEffect(() => {
-    tags.length ? loadSearch() : firstLoad()
+    } else {
+      setQuery(firebase.firestore().collection('posts').orderBy('date', 'desc'))
+    }
   }, [tags])
 
-  async function firstLoad() {
-    startLoading()
-    const snapshot = await firstQuery.get()
-    setPosts(snapshot.docs)
-    stopLoading()
-  }
-
-  useEffect(() => {
-    firstLoad()
-  }, [])
+  const {
+    isLoadingPage,
+    pageContent,
+    canGoNext,
+    canGoPrev,
+    goNext,
+    goPrev,
+    pageNumber,
+  } = usePagination(query)
 
   const [isImageOpen, openImage, closeImage] = useToggler()
   const [selectedImage, setSelectedImage] = useState<
@@ -212,7 +104,7 @@ export default function Home() {
               <MasonicMemo
                 className={classes.masonry}
                 columnWidth={150}
-                items={posts}
+                items={pageContent}
                 columnGutter={8}
                 render={masonicRender}
               />
@@ -224,14 +116,14 @@ export default function Home() {
                 <IconButton
                   aria-label='Previous page'
                   icon={<MdNavigateBefore />}
-                  onClick={prevPage}
+                  onClick={goPrev}
                   isDisabled={!canGoPrev}
                 />
-                <Text>{page.toString()}</Text>
+                <Text>{pageNumber.toString()}</Text>
                 <IconButton
                   aria-label='Previous page'
                   icon={<MdNavigateNext />}
-                  onClick={nextPage}
+                  onClick={goNext}
                   isDisabled={!canGoNext}
                 />
               </Flex>

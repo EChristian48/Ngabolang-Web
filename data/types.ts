@@ -1,5 +1,4 @@
 import firebase from 'firebase/app'
-import { type } from 'os'
 
 export type User = Pick<
   firebase.User,
@@ -13,3 +12,7 @@ export type Post = {
   location: string
   date: firebase.firestore.FieldValue | firebase.firestore.Timestamp
 } & Pick<User, 'uid'>
+
+export type Aggregates = {
+  count: number
+}
