@@ -77,6 +77,8 @@ export default function usePagination(
     loadFirst()
   }, [query])
 
+  const refreshPage = () => loadFirst()
+
   return {
     isLoadingPage,
     canGoNext,
@@ -85,5 +87,6 @@ export default function usePagination(
     goNext,
     goPrev,
     pageNumber,
+    refreshPage,
   }
 }

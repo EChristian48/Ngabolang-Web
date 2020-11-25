@@ -9,6 +9,7 @@ import {
   DrawerOverlay,
   DrawerProps,
   Heading,
+  HStack,
   Image,
   SimpleGrid,
   Skeleton,
@@ -21,22 +22,25 @@ import useUploaderDoc from '@root/hooks/useUploaderDoc'
 import { format } from 'date-fns'
 import firebase from 'firebase/app'
 import { useToggler } from 'molohooks'
-import { FC, memo, useEffect, useState } from 'react'
+import { FC, memo, useEffect } from 'react'
 import { MdDelete, MdFavorite } from 'react-icons/md'
 
 export type ImageDrawerProps = Omit<DrawerProps, 'children'> & {
   post: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
+  refreshFunc: () => void
 }
 
 const ImageDrawer: FC<ImageDrawerProps> = props => {
-  const { post, ...drawerProps } = props
+  const { post, refreshFunc, ...drawerProps } = props
   const postData = post.data() as Post
+
   const date = new firebase.firestore.Timestamp(
     (postData.date as firebase.firestore.Timestamp).seconds,
     (postData.date as firebase.firestore.Timestamp).nanoseconds
   )
   const displayLocation =
     postData.location[0] + postData.location.slice(1).toLowerCase()
+  const isOwner = postData.uid === firebase.auth().currentUser?.uid
 
   const [isLoadingUploader, uploader] = useUploaderDoc(postData.uid, post)
   const [isLoadingCurrentUser, currentUser] = useListenCurrentUser()
@@ -48,8 +52,11 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
   ] = useToggler()
 
   function checkAlreadyFavorite() {
-    removeAlreadyFavorite()
-    if (currentUser.favorites.includes(post.id)) setAlreadyFavorite()
+    if (currentUser.favorites.includes(post.id)) {
+      setAlreadyFavorite()
+    } else {
+      removeAlreadyFavorite()
+    }
   }
 
   useEffect(() => {
@@ -74,6 +81,13 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
     await firebase.firestore().collection('users').doc(uid).update(data)
   }
 
+  async function deletePost() {
+    await firebase.firestore().collection('posts').doc(post.id).delete()
+
+    refreshFunc()
+    props.onClose()
+  }
+
   return (
     <Drawer {...drawerProps} placement='left' size='full'>
       <DrawerOverlay>
@@ -82,7 +96,9 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
           <DrawerHeader>
             {isLoadingUploader
               ? 'Loading info...'
-              : `${displayLocation}, ${uploader.displayName}`}
+              : `${displayLocation}, ${
+                  uploader?.displayName || 'Deleted User'
+                }`}
           </DrawerHeader>
           <DrawerBody>
             <Container maxWidth={['100%', , '80%']} paddingBottom='32px'>
@@ -100,24 +116,40 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
                 />
 
                 <VStack align='start'>
-                  <Button
-                    aria-label='Save to favorites'
-                    leftIcon={isAlreadyFavorite ? <MdDelete /> : <MdFavorite />}
-                    isFullWidth
-                    onClick={updateFavorites}
-                    isLoading={isLoadingCurrentUser}
-                  >
-                    {isAlreadyFavorite
-                      ? 'Remove from Favorites'
-                      : 'Add to Favorites'}
-                  </Button>
+                  <HStack width='full'>
+                    <Button
+                      aria-label='Save to favorites'
+                      leftIcon={
+                        isAlreadyFavorite ? <MdDelete /> : <MdFavorite />
+                      }
+                      isFullWidth
+                      onClick={updateFavorites}
+                      isLoading={isLoadingCurrentUser}
+                    >
+                      {isAlreadyFavorite
+                        ? 'Remove from Favorites'
+                        : 'Add to Favorites'}
+                    </Button>
+
+                    {isOwner && (
+                      <Button
+                        aria-label='Save to favorites'
+                        leftIcon={<MdDelete />}
+                        isFullWidth
+                        onClick={deletePost}
+                        isLoading={isLoadingCurrentUser}
+                      >
+                        Delete Post
+                      </Button>
+                    )}
+                  </HStack>
 
                   <Heading size='lg'>Location: {displayLocation}</Heading>
                   {isLoadingUploader ? (
                     <Text>Loading user info...</Text>
                   ) : (
                     <Text fontSize='lg'>
-                      Uploaded by: {uploader.displayName}
+                      Uploaded by: {uploader?.displayName || 'Deleted User'}
                     </Text>
                   )}
                   <Text>Date: {format(date.toDate(), 'dd MMMM yyyy')}</Text>

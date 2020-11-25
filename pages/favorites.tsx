@@ -95,6 +95,7 @@ export default function Favorites() {
             post={selectedImage}
             onClose={closeImage}
             isOpen={isImageOpen}
+            refreshFunc={loadUserFavorites}
           />
         )}
       </NeedAuth>

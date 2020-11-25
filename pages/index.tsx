@@ -29,7 +29,19 @@ export default function Home() {
   const { tags } = useTags()
   const [query, setQuery] = useState<
     firebase.firestore.Query<firebase.firestore.DocumentData>
-  >(firebase.firestore().collection('posts').orderBy('date', 'desc'))
+  >(() =>
+    tags.length
+      ? firebase
+          .firestore()
+          .collection('posts')
+          .where(
+            'location',
+            'in',
+            tags.map(tag => tag.toUpperCase())
+          )
+          .orderBy('date', 'desc')
+      : firebase.firestore().collection('posts').orderBy('date', 'desc')
+  )
 
   useEffect(() => {
     if (tags.length) {
@@ -57,6 +69,7 @@ export default function Home() {
     goNext,
     goPrev,
     pageNumber,
+    refreshPage,
   } = usePagination(query)
 
   const [isImageOpen, openImage, closeImage] = useToggler()
@@ -135,6 +148,7 @@ export default function Home() {
             post={selectedImage}
             onClose={closeImage}
             isOpen={isImageOpen}
+            refreshFunc={refreshPage}
           />
         )}
       </NeedAuth>

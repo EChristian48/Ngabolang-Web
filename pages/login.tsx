@@ -1,16 +1,21 @@
-import { Button, Flex, Text, useToast } from '@chakra-ui/react'
 import {
-  EmailInput,
-  LinkWrapper,
-  MustBeSignedOut,
-  PasswordInput,
-} from '@root/components'
-import classes from '@styles/Login.module.css'
+  Button,
+  Center,
+  Flex,
+  Heading,
+  Image,
+  Input,
+  Text,
+  useToast,
+  VStack,
+} from '@chakra-ui/react'
+import { LinkWrapper, MustBeSignedOut } from '@root/components'
 import firebase from 'firebase/app'
 import { useInputHandler, useToggler } from 'molohooks'
 import { NextPage } from 'next'
 import { FormEvent } from 'react'
 import { FaGoogle } from 'react-icons/fa'
+import Head from 'next/head'
 
 const Login: NextPage = () => {
   const [isLoading, startLoading, stopLoading] = useToggler()
@@ -35,7 +40,7 @@ const Login: NextPage = () => {
     }
   }
 
-  const loginWithEmail = (e: FormEvent<HTMLFormElement>) => {
+  const loginWithEmail = (e: FormEvent<HTMLDivElement>) => {
     e.preventDefault()
     login(firebase.auth().signInWithEmailAndPassword(emailValue, passValue))
   }
@@ -46,46 +51,94 @@ const Login: NextPage = () => {
     )
 
   return (
-    <MustBeSignedOut>
-      <Flex alignItems='center' justifyContent='center' height='100vh'>
-        <form className={classes.loginForm} onSubmit={loginWithEmail}>
-          <Text fontSize='2xl' marginBottom='2'>
-            Sign In
-          </Text>
+    <>
+      <Head>
+        <link rel='shortcut icon' href='globe.png' type='image/x-icon' />
+        <title>Login | Ngabolang</title>
+      </Head>
 
-          <EmailInput onChange={emailHandler} value={emailValue} isRequired />
-          <PasswordInput onChange={passHandler} value={passValue} isRequired />
+      <MustBeSignedOut>
+        <Flex
+          direction={['column', , 'row']}
+          width='100vw'
+          height='100vh'
+          background='
+        linear-gradient(
+          rgba(0, 0, 0, 0.5), 
+          rgba(0, 0, 0, 0.7)
+        ),
+        url(login_bg.jpg)'
+          backgroundRepeat='no-repeat'
+          backgroundPosition={['center', , '50% 70%']}
+          backgroundSize='cover'
+        >
+          <Center height='90px' margin={[, , 'auto']}>
+            <Heading color='white' size='2xl'>
+              Ngabolang
+            </Heading>
+            <Image src='globe.png' maxHeight='90%' />
+          </Center>
 
-          <Button
-            isLoading={isLoading}
-            width='full'
-            marginTop='2'
-            type='submit'
+          <Flex
+            alignItems='center'
+            justifyContent='center'
+            direction='column'
+            margin='auto'
           >
-            Login
-          </Button>
+            <Heading color='white' marginBottom={4}>
+              Sign In
+            </Heading>
 
-          <Text fontSize='lg' marginY='2' marginTop='6'>
-            Or Sign In with
-          </Text>
-          <Button
-            isLoading={isLoading}
-            backgroundColor='blue.500'
-            color='white'
-            width='full'
-            leftIcon={<FaGoogle />}
-            onClick={loginWithGoogle}
-          >
-            Google
-          </Button>
+            <VStack as='form' onSubmit={loginWithEmail} minWidth='240px'>
+              <Input
+                type='email'
+                placeholder='E-Mail'
+                onChange={emailHandler}
+                value={emailValue}
+                isRequired
+                variant='outlined'
+              />
+              <Input
+                type='password'
+                placeholder='Password'
+                onChange={passHandler}
+                value={passValue}
+                isRequired
+                variant='outlined'
+              />
 
-          <Text marginTop='6' color='blue.600'>
-            Or{' '}
-            <LinkWrapper nextProps={{ href: '/register' }}>Sign Up</LinkWrapper>
-          </Text>
-        </form>
-      </Flex>
-    </MustBeSignedOut>
+              <Button
+                isLoading={isLoading}
+                isFullWidth
+                type='submit'
+                colorScheme='blue'
+              >
+                Login
+              </Button>
+
+              <Text fontSize='lg' color='white'>
+                Or Sign In with
+              </Text>
+              <Button
+                isLoading={isLoading}
+                isFullWidth
+                leftIcon={<FaGoogle />}
+                onClick={loginWithGoogle}
+              >
+                Google
+              </Button>
+            </VStack>
+
+            <LinkWrapper
+              nextProps={{ href: '/register' }}
+              chakraProps={{ color: 'blue.100', marginTop: 8 }}
+            >
+              Don't Have an Account?
+            </LinkWrapper>
+          </Flex>
+        </Flex>
+      </MustBeSignedOut>
+    </>
   )
 }
 

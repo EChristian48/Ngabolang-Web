@@ -1,9 +1,18 @@
-import { Button, Flex, Text, useToast } from '@chakra-ui/react'
-import { EmailInput, MustBeSignedOut, PasswordInput } from '@root/components'
-import classes from '@styles/Login.module.css'
+import {
+  Button,
+  Center,
+  Flex,
+  Heading,
+  Image,
+  Input,
+  useToast,
+  VStack,
+} from '@chakra-ui/react'
+import { LinkWrapper, MustBeSignedOut } from '@root/components'
 import firebase from 'firebase/app'
 import { useInputHandler, useToggler } from 'molohooks'
 import { NextPage } from 'next'
+import Head from 'next/head'
 import { FormEvent } from 'react'
 
 const Register: NextPage = () => {
@@ -14,7 +23,7 @@ const Register: NextPage = () => {
 
   const failedToast = useToast()
 
-  async function signUp(e: FormEvent<HTMLFormElement>) {
+  async function signUp(e: FormEvent<HTMLDivElement>) {
     e.preventDefault()
     startLoading()
 
@@ -45,33 +54,93 @@ const Register: NextPage = () => {
   }
 
   return (
-    <MustBeSignedOut>
-      <Flex alignItems='center' justifyContent='center' height='100vh'>
-        <form className={classes.loginForm} onSubmit={signUp}>
-          <Text fontSize='2xl' marginBottom='2'>
-            Register
-          </Text>
+    <>
+      <Head>
+        <link rel='shortcut icon' href='globe.png' type='image/x-icon' />
+        <title>Register | Ngabolang</title>
+      </Head>
 
-          <EmailInput isRequired value={emailValue} onChange={emailHandler} />
-          <PasswordInput isRequired value={passValue} onChange={passHandler} />
-          <PasswordInput
-            isRequired
-            placeholder='Confirm Password'
-            value={confPassValue}
-            onChange={confPassHandler}
-          />
+      <MustBeSignedOut>
+        <Flex
+          direction={['column', , 'row']}
+          width='100vw'
+          height='100vh'
+          background='
+        linear-gradient(
+          rgba(0, 0, 0, 0.5), 
+          rgba(0, 0, 0, 0.7)
+        ),
+        url(login_bg.jpg)'
+          backgroundRepeat='no-repeat'
+          backgroundPosition={['center', , '50% 70%']}
+          backgroundSize='cover'
+        >
+          <Center height='90px' margin={[, , 'auto']}>
+            <Heading color='white' size='2xl'>
+              Ngabolang
+            </Heading>
+            <Image src='globe.png' maxHeight='90%' />
+          </Center>
 
-          <Button
-            width='full'
-            marginTop='2'
-            type='submit'
-            isLoading={isLoading}
+          <Flex
+            alignItems='center'
+            justifyContent='center'
+            direction='column'
+            height='100vh'
+            as='form'
+            onSubmit={signUp}
+            margin='auto'
           >
-            Register
-          </Button>
-        </form>
-      </Flex>
-    </MustBeSignedOut>
+            <Heading color='white' marginBottom={4}>
+              Register
+            </Heading>
+
+            <VStack minWidth='240px'>
+              <Input
+                type='email'
+                placeholder='E-Mail'
+                onChange={emailHandler}
+                value={emailValue}
+                isRequired
+                variant='outlined'
+              />
+              <Input
+                type='password'
+                placeholder='Password'
+                onChange={passHandler}
+                value={passValue}
+                isRequired
+                variant='outlined'
+              />
+              <Input
+                type='password'
+                placeholder='Confirm Password'
+                onChange={confPassHandler}
+                value={confPassValue}
+                isRequired
+                variant='outlined'
+              />
+
+              <Button
+                isFullWidth
+                colorScheme='blue'
+                type='submit'
+                isLoading={isLoading}
+              >
+                Register
+              </Button>
+            </VStack>
+
+            <LinkWrapper
+              nextProps={{ href: '/login' }}
+              chakraProps={{ color: 'blue.100', marginTop: 8 }}
+            >
+              Have an Account?
+            </LinkWrapper>
+          </Flex>
+        </Flex>
+      </MustBeSignedOut>
+    </>
   )
 }
 

@@ -21,6 +21,7 @@ import { MenuType } from '@root/data/menu'
 import useTags from '@root/hooks/useTags'
 import firebase from 'firebase/app'
 import { useInputHandler } from 'molohooks'
+import { useRouter } from 'next/router'
 import React, { FormEvent } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { MdMenu, MdSearch } from 'react-icons/md'
@@ -46,6 +47,8 @@ export default function TopBar({
 
   const { addTag, tags } = useTags()
   const [searchValue, searchHandler, clearSearch] = useInputHandler()
+
+  const { pathname } = useRouter()
 
   function validateSearch() {
     if (tags.includes(searchValue)) throw new Error('Tag sudah ada!')
@@ -89,20 +92,22 @@ export default function TopBar({
                 <Button>{label}</Button>
               </LinkWrapper>
             ))}
-          <InputGroup as='form' onSubmit={onSubmit}>
-            <InputLeftElement
-              pointerEvents='none'
-              children={<MdSearch />}
-              padding={0}
-            />
-            <Input
-              type='search'
-              placeholder='Cari lokasi wisata'
-              value={searchValue}
-              onChange={searchHandler}
-            />
-            <button type='submit' style={{ display: 'none' }} />
-          </InputGroup>
+          {pathname === '/' && (
+            <InputGroup as='form' onSubmit={onSubmit}>
+              <InputLeftElement
+                pointerEvents='none'
+                children={<MdSearch />}
+                padding={0}
+              />
+              <Input
+                type='search'
+                placeholder='Cari lokasi wisata'
+                value={searchValue}
+                onChange={searchHandler}
+              />
+              <button type='submit' style={{ display: 'none' }} />
+            </InputGroup>
+          )}
         </HStack>
         {isMediumScreen ? (
           <Menu>
