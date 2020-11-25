@@ -12,7 +12,7 @@ import { LinkWrapper, MustBeSignedOut } from '@root/components'
 import firebase from 'firebase/app'
 import { useInputHandler, useToggler } from 'molohooks'
 import { NextPage } from 'next'
-import Head from 'next/head'
+import { NextSeo } from 'next-seo'
 import { FormEvent } from 'react'
 
 const Register: NextPage = () => {
@@ -55,10 +55,7 @@ const Register: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <link rel='shortcut icon' href='globe.png' type='image/x-icon' />
-        <title>Register | Ngabolang</title>
-      </Head>
+      <NextSeo title='Register' />
 
       <MustBeSignedOut>
         <Flex

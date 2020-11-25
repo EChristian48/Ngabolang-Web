@@ -21,6 +21,7 @@
     "molohooks": "x",
     "next": "10.0.0",
     "next-on-netlify": "x",
+    "next-seo": "^4.17.0",
     "react": "17",
     "react-dom": "17",
     "react-firebase-hooks": "^2.2.0",

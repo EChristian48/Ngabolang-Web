@@ -13,9 +13,9 @@ import { LinkWrapper, MustBeSignedOut } from '@root/components'
 import firebase from 'firebase/app'
 import { useInputHandler, useToggler } from 'molohooks'
 import { NextPage } from 'next'
+import { NextSeo } from 'next-seo'
 import { FormEvent } from 'react'
 import { FaGoogle } from 'react-icons/fa'
-import Head from 'next/head'
 
 const Login: NextPage = () => {
   const [isLoading, startLoading, stopLoading] = useToggler()
@@ -52,10 +52,7 @@ const Login: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <link rel='shortcut icon' href='globe.png' type='image/x-icon' />
-        <title>Login | Ngabolang</title>
-      </Head>
+      <NextSeo title='Login' />
 
       <MustBeSignedOut>
         <Flex
