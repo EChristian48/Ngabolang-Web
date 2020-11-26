@@ -14,10 +14,10 @@ import {
   MenuItem,
   MenuList,
   Portal,
-  useMediaQuery,
   useToast,
 } from '@chakra-ui/react'
 import { MenuType } from '@root/data/menu'
+import { useMediumScreen } from '@root/hooks'
 import useTags from '@root/hooks/useTags'
 import firebase from 'firebase/app'
 import { useInputHandler } from 'molohooks'
@@ -38,7 +38,7 @@ export default function TopBar({
   profileMenus,
   topMenus,
 }: TopBarProps) {
-  const [isMediumScreen] = useMediaQuery('(min-width: 48em)')
+  const isMediumScreen = useMediumScreen()
   const [user] = useAuthState(firebase.auth()) as [
     firebase.User,
     boolean,
@@ -77,7 +77,14 @@ export default function TopBar({
   }
 
   return (
-    <Container maxWidth={['100%', , '80%']}>
+    <Container
+      maxWidth='full'
+      position='sticky'
+      top={0}
+      zIndex={1}
+      backgroundColor='blue.500'
+      roundedBottom={20}
+    >
       <Flex
         height={['60px', , '80px']}
         alignItems='center'
@@ -89,7 +96,7 @@ export default function TopBar({
           {isMediumScreen &&
             topMenus.map(({ href, label }) => (
               <LinkWrapper nextProps={{ href }} key={label}>
-                <Button colorScheme='blue'>{label}</Button>
+                <Button>{label}</Button>
               </LinkWrapper>
             ))}
           {pathname === '/' && (
@@ -104,6 +111,7 @@ export default function TopBar({
                 placeholder='Cari lokasi wisata'
                 value={searchValue}
                 onChange={searchHandler}
+                variant='outlined'
               />
               <button type='submit' style={{ display: 'none' }} />
             </InputGroup>
@@ -129,6 +137,8 @@ export default function TopBar({
             aria-label='menu'
             icon={<MdMenu />}
             variant='ghost'
+            color='white'
+            _hover={{ color: 'black' }}
             onClick={onMenuClick}
           />
         )}
