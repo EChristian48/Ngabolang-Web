@@ -7,10 +7,11 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { ImageBrick, ImageDrawer, Layout } from '@root/components'
+import { Masonry } from '@root/components/Memoized'
 import { useMediumScreen, usePagination, useTaggedQueries } from '@root/hooks'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
-import { Masonry, RenderComponentProps } from 'masonic'
+import { RenderComponentProps } from 'masonic'
 import { useToggler } from 'molohooks'
 import { NextSeo } from 'next-seo'
 import { useCallback, useState } from 'react'
