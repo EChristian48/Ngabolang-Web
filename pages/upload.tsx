@@ -19,6 +19,7 @@ import 'firebase/firestore'
 import 'firebase/storage'
 import { useInputHandler } from 'molohooks'
 import { NextPage } from 'next'
+import { NextSeo } from 'next-seo'
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 
 const Upload: NextPage = () => {
@@ -93,7 +94,10 @@ const Upload: NextPage = () => {
   }
 
   return (
-    <NeedAuth>
+    <>
+      <NextSeo title='Upload Foto' />
+
+      <NeedAuth>
       <Nav />
 
       <Container maxWidth={['100%', , '80%']} marginTop={4}>
@@ -102,6 +106,8 @@ const Upload: NextPage = () => {
             height={['300px', , '400px']}
             borderWidth='4px'
             borderStyle='dashed'
+            borderColor='blue.500'
+            backgroundColor='blue.100'
             rounded='7px'
             justify='center'
             align='center'
@@ -119,7 +125,9 @@ const Upload: NextPage = () => {
                 ref={inputFileRef}
                 style={{ display: 'none' }}
               />
-              <Button as='span'>Select Image</Button>
+              <Button as='span' colorScheme='blue'>
+                Select Image
+              </Button>
             </label>
           </Flex>
 
@@ -128,12 +136,18 @@ const Upload: NextPage = () => {
               <>
                 <Input
                   placeholder='Tambah Lokasi...'
+                  isRequired
                   value={location}
                   size='lg'
                   onChange={setLocation}
                 />
 
-                <Button type='submit' isFullWidth>
+                <Button
+                  type='submit'
+                  isFullWidth
+                  colorScheme='blue'
+                  isLoading={progress !== -1}
+                >
                   Upload
                 </Button>
 
@@ -156,6 +170,7 @@ const Upload: NextPage = () => {
         </SimpleGrid>
       </Container>
     </NeedAuth>
+    </>
   )
 }
 
