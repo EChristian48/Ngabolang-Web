@@ -24,7 +24,7 @@ const NeedAuth: FC = ({ children }) => {
   return loading ? (
     <LoadingScreen />
   ) : isRedirecting ? (
-    <LoadingScreen>Who the hell are you?</LoadingScreen>
+    <LoadingScreen>Redirecting to Login Page?</LoadingScreen>
   ) : (
     <>{children}</>
   )
