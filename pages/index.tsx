@@ -6,61 +6,19 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react'
-import ImageBrick from '@root/components/ImageBrick'
-import ImageDrawer from '@root/components/ImageDrawer'
-import Nav from '@root/components/Nav'
-import NeedAuth from '@root/components/NeedAuth'
-import TagsBar from '@root/components/TagsBar'
-import usePagination from '@root/hooks/usePagination'
-import useTags from '@root/hooks/useTags'
-import classes from '@styles/Masonry.module.css'
+import { ImageBrick, ImageDrawer, Layout } from '@root/components'
+import { useMediumScreen, usePagination, useTaggedQueries } from '@root/hooks'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import { Masonry, RenderComponentProps } from 'masonic'
 import { useToggler } from 'molohooks'
-import { memo, useCallback, useEffect, useState } from 'react'
+import { NextSeo } from 'next-seo'
+import { useCallback, useState } from 'react'
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md'
 
-const pageSize = 20
-// const pageWithOffset = pageSize + 1
-const MasonicMemo = memo(Masonry)
-
 export default function Home() {
-  const { tags } = useTags()
-  const [query, setQuery] = useState<
-    firebase.firestore.Query<firebase.firestore.DocumentData>
-  >(() =>
-    tags.length
-      ? firebase
-          .firestore()
-          .collection('posts')
-          .where(
-            'location',
-            'in',
-            tags.map(tag => tag.toUpperCase())
-          )
-          .orderBy('date', 'desc')
-      : firebase.firestore().collection('posts').orderBy('date', 'desc')
-  )
-
-  useEffect(() => {
-    if (tags.length) {
-      setQuery(
-        firebase
-          .firestore()
-          .collection('posts')
-          .where(
-            'location',
-            'in',
-            tags.map(tag => tag.toUpperCase())
-          )
-          .orderBy('date', 'desc')
-      )
-    } else {
-      setQuery(firebase.firestore().collection('posts').orderBy('date', 'desc'))
-    }
-  }, [tags])
-
+  const isMediumScreen = useMediumScreen()
+  const query = useTaggedQueries()
   const {
     isLoadingPage,
     pageContent,
@@ -98,26 +56,20 @@ export default function Home() {
 
   return (
     <>
-      <NeedAuth>
-        <Nav />
-        <TagsBar />
+      <NextSeo title='Home' />
 
-        <Container
-          maxWidth={['100%', , '80%']}
-          marginTop={4}
-          paddingBottom={12}
-        >
+      <Layout>
+        <Container maxWidth='full' marginTop={4} paddingBottom={12}>
           {isLoadingPage ? (
-            <Center width='full'>
+            <Center width='full' height='full'>
               <Spinner />
             </Center>
           ) : (
             <>
-              <MasonicMemo
-                className={classes.masonry}
-                columnWidth={150}
+              <Masonry
+                columnWidth={isMediumScreen ? 300 : 150}
                 items={pageContent}
-                columnGutter={8}
+                columnGutter={isMediumScreen ? 12 : 8}
                 render={masonicRender}
               />
               <Flex
@@ -130,6 +82,7 @@ export default function Home() {
                   icon={<MdNavigateBefore />}
                   onClick={goPrev}
                   isDisabled={!canGoPrev}
+                  colorScheme='blue'
                 />
                 <Text>{pageNumber.toString()}</Text>
                 <IconButton
@@ -137,21 +90,22 @@ export default function Home() {
                   icon={<MdNavigateNext />}
                   onClick={goNext}
                   isDisabled={!canGoNext}
+                  colorScheme='blue'
                 />
               </Flex>
             </>
           )}
         </Container>
+      </Layout>
 
-        {selectedImage && (
-          <ImageDrawer
-            post={selectedImage}
-            onClose={closeImage}
-            isOpen={isImageOpen}
-            refreshFunc={refreshPage}
-          />
-        )}
-      </NeedAuth>
+      {selectedImage && (
+        <ImageDrawer
+          post={selectedImage}
+          onClose={closeImage}
+          isOpen={isImageOpen}
+          refreshFunc={refreshPage}
+        />
+      )}
     </>
   )
 }
