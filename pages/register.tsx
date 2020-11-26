@@ -1,34 +1,32 @@
 import {
   Button,
-  Center,
   Flex,
   Heading,
-  Image,
   Input,
   useToast,
   VStack,
 } from '@chakra-ui/react'
-import { LinkWrapper, MustBeSignedOut } from '@root/components'
+import { LinkWrapper } from '@root/components'
+import AuthPage from '@root/components/AuthPage'
 import firebase from 'firebase/app'
 import { useInputHandler, useToggler } from 'molohooks'
-import { NextPage } from 'next'
 import { NextSeo } from 'next-seo'
 import { FormEvent } from 'react'
 
-const Register: NextPage = () => {
+const Register = () => {
   const [isLoading, startLoading, stopLoading] = useToggler()
   const [emailValue, emailHandler] = useInputHandler()
   const [passValue, passHandler] = useInputHandler()
   const [confPassValue, confPassHandler] = useInputHandler()
 
-  const failedToast = useToast()
+  const toast = useToast()
 
   async function signUp(e: FormEvent<HTMLDivElement>) {
     e.preventDefault()
     startLoading()
 
     if (passValue !== confPassValue) {
-      failedToast({
+      toast({
         title: 'Failed to sign up',
         description: "Those passwords don't match, duh",
         isClosable: true,
@@ -42,7 +40,7 @@ const Register: NextPage = () => {
         .auth()
         .createUserWithEmailAndPassword(emailValue, passValue)
     } catch (e) {
-      failedToast({
+      toast({
         title: 'Failed to sign up',
         description: (e as firebase.auth.AuthError).message,
         isClosable: true,
@@ -57,86 +55,64 @@ const Register: NextPage = () => {
     <>
       <NextSeo title='Register' />
 
-      <MustBeSignedOut>
+      <AuthPage>
         <Flex
-          direction={['column', , 'row']}
-          width='100vw'
+          alignItems='center'
+          justifyContent='center'
+          direction='column'
           height='100vh'
-          background='
-        linear-gradient(
-          rgba(0, 0, 0, 0.5), 
-          rgba(0, 0, 0, 0.7)
-        ),
-        url(login_bg.jpg)'
-          backgroundRepeat='no-repeat'
-          backgroundPosition={['center', , '50% 70%']}
-          backgroundSize='cover'
+          as='form'
+          onSubmit={signUp}
+          margin='auto'
         >
-          <Center height='90px' margin={[, , 'auto']}>
-            <Heading color='white' size='2xl'>
-              Ngabolang
-            </Heading>
-            <Image src='globe.png' maxHeight='90%' />
-          </Center>
+          <Heading color='white' marginBottom={4}>
+            Register
+          </Heading>
 
-          <Flex
-            alignItems='center'
-            justifyContent='center'
-            direction='column'
-            height='100vh'
-            as='form'
-            onSubmit={signUp}
-            margin='auto'
-          >
-            <Heading color='white' marginBottom={4}>
-              Register
-            </Heading>
+          <VStack minWidth='240px'>
+            <Input
+              type='email'
+              placeholder='E-Mail'
+              onChange={emailHandler}
+              value={emailValue}
+              isRequired
+              variant='outlined'
+            />
+            <Input
+              type='password'
+              placeholder='Password'
+              onChange={passHandler}
+              value={passValue}
+              isRequired
+              variant='outlined'
+            />
+            <Input
+              type='password'
+              placeholder='Confirm Password'
+              onChange={confPassHandler}
+              value={confPassValue}
+              isRequired
+              variant='outlined'
+            />
 
-            <VStack minWidth='240px'>
-              <Input
-                type='email'
-                placeholder='E-Mail'
-                onChange={emailHandler}
-                value={emailValue}
-                isRequired
-                variant='outlined'
-              />
-              <Input
-                type='password'
-                placeholder='Password'
-                onChange={passHandler}
-                value={passValue}
-                isRequired
-                variant='outlined'
-              />
-              <Input
-                type='password'
-                placeholder='Confirm Password'
-                onChange={confPassHandler}
-                value={confPassValue}
-                isRequired
-                variant='outlined'
-              />
-
-              <Button
-                isFullWidth
-                colorScheme='blue'
-                type='submit'
-                isLoading={isLoading}
-              >
-                Register
-              </Button>
-            </VStack>
-
-            <LinkWrapper
-              nextProps={{ href: '/login' }}
-              chakraProps={{ color: 'blue.100', marginTop: 8 }}
+            <Button
+              isFullWidth
+              colorScheme='blue'
+              type='submit'
+              isLoading={isLoading}
             >
-              Have an Account?
-            </LinkWrapper>
-          </Flex>
+              Register
+            </Button>
+          </VStack>
+
+          <LinkWrapper
+            nextProps={{ href: '/login' }}
+            chakraProps={{ color: 'blue.100', marginTop: 8 }}
+          >
+            Have an Account?
+          </LinkWrapper>
         </Flex>
-      </MustBeSignedOut>
+      </AuthPage>
     </>
   )
 }

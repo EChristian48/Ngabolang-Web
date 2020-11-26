@@ -1,35 +1,33 @@
 import {
   Button,
-  Center,
   Flex,
   Heading,
-  Image,
   Input,
   Text,
   useToast,
   VStack,
 } from '@chakra-ui/react'
-import { LinkWrapper, MustBeSignedOut } from '@root/components'
+import { LinkWrapper } from '@root/components'
+import AuthPage from '@root/components/AuthPage'
 import firebase from 'firebase/app'
 import { useInputHandler, useToggler } from 'molohooks'
-import { NextPage } from 'next'
 import { NextSeo } from 'next-seo'
 import { FormEvent } from 'react'
 import { FaGoogle } from 'react-icons/fa'
 
-const Login: NextPage = () => {
+const Login = () => {
   const [isLoading, startLoading, stopLoading] = useToggler()
   const [emailValue, emailHandler] = useInputHandler()
   const [passValue, passHandler] = useInputHandler()
 
-  const failedToast = useToast()
+  const toast = useToast()
 
   async function login(method: Promise<unknown>) {
     startLoading()
     try {
       await method
     } catch (e) {
-      failedToast({
+      toast({
         title: 'Failed to login',
         description: (e as firebase.auth.AuthError).message,
         isClosable: true,
@@ -52,89 +50,67 @@ const Login: NextPage = () => {
 
   return (
     <>
-      <NextSeo title='Login' />
+      <NextSeo title='Sign In' />
 
-      <MustBeSignedOut>
+      <AuthPage>
         <Flex
-          direction={['column', , 'row']}
-          width='100vw'
-          height='100vh'
-          background='
-        linear-gradient(
-          rgba(0, 0, 0, 0.5), 
-          rgba(0, 0, 0, 0.7)
-        ),
-        url(login_bg.jpg)'
-          backgroundRepeat='no-repeat'
-          backgroundPosition={['center', , '50% 70%']}
-          backgroundSize='cover'
+          alignItems='center'
+          justifyContent='center'
+          direction='column'
+          margin='auto'
         >
-          <Center height='90px' margin={[, , 'auto']}>
-            <Heading color='white' size='2xl'>
-              Ngabolang
-            </Heading>
-            <Image src='globe.png' maxHeight='90%' />
-          </Center>
+          <Heading color='white' marginBottom={4}>
+            Sign In
+          </Heading>
 
-          <Flex
-            alignItems='center'
-            justifyContent='center'
-            direction='column'
-            margin='auto'
-          >
-            <Heading color='white' marginBottom={4}>
-              Sign In
-            </Heading>
+          <VStack as='form' onSubmit={loginWithEmail} minWidth='240px'>
+            <Input
+              type='email'
+              placeholder='E-Mail'
+              onChange={emailHandler}
+              value={emailValue}
+              isRequired
+              variant='outlined'
+            />
+            <Input
+              type='password'
+              placeholder='Password'
+              onChange={passHandler}
+              value={passValue}
+              isRequired
+              variant='outlined'
+            />
 
-            <VStack as='form' onSubmit={loginWithEmail} minWidth='240px'>
-              <Input
-                type='email'
-                placeholder='E-Mail'
-                onChange={emailHandler}
-                value={emailValue}
-                isRequired
-                variant='outlined'
-              />
-              <Input
-                type='password'
-                placeholder='Password'
-                onChange={passHandler}
-                value={passValue}
-                isRequired
-                variant='outlined'
-              />
-
-              <Button
-                isLoading={isLoading}
-                isFullWidth
-                type='submit'
-                colorScheme='blue'
-              >
-                Login
-              </Button>
-
-              <Text fontSize='lg' color='white'>
-                Or Sign In with
-              </Text>
-              <Button
-                isLoading={isLoading}
-                isFullWidth
-                leftIcon={<FaGoogle />}
-                onClick={loginWithGoogle}
-              >
-                Google
-              </Button>
-            </VStack>
-
-            <LinkWrapper
-              nextProps={{ href: '/register' }}
-              chakraProps={{ color: 'blue.100', marginTop: 8 }}
+            <Button
+              isLoading={isLoading}
+              isFullWidth
+              type='submit'
+              colorScheme='blue'
             >
-              Don't Have an Account?
-            </LinkWrapper>
-          </Flex>
+              Login
+            </Button>
+
+            <Text fontSize='lg' color='white'>
+              Or Sign In with
+            </Text>
+            <Button
+              isLoading={isLoading}
+              isFullWidth
+              leftIcon={<FaGoogle />}
+              onClick={loginWithGoogle}
+            >
+              Google
+            </Button>
+          </VStack>
+
+          <LinkWrapper
+            nextProps={{ href: '/register' }}
+            chakraProps={{ color: 'blue.100', marginTop: 8 }}
+          >
+            Don't Have an Account?
+          </LinkWrapper>
         </Flex>
-      </MustBeSignedOut>
+      </AuthPage>
     </>
   )
 }
