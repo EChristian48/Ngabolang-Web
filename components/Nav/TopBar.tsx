@@ -90,7 +90,7 @@ export default function TopBar({
         alignItems='center'
         justifyContent='space-between'
       >
-        <Image src='globe.png' height='80%' />
+        <Image src='globe.png' height='80%' alt='Ngabolang Logo' />
 
         <HStack marginRight='auto' marginLeft={2}>
           {isMediumScreen &&
