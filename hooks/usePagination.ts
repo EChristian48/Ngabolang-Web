@@ -30,6 +30,7 @@ export default function usePagination(
 
   async function loadFirst() {
     startLoadingPage()
+    enableNext()
     const snapshot = await query.limit(pageSizeWithOffset).get()
 
     if (snapshot.docs.length < pageSizeWithOffset) disableNext()
