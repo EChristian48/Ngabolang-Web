@@ -91,14 +91,16 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
   return (
     <Drawer {...drawerProps} placement='left' size='full'>
       <DrawerOverlay>
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>
-            {isLoadingUploader
-              ? 'Loading info...'
-              : `${displayLocation}, ${
-                  uploader?.displayName || 'Deleted User'
-                }`}
+        <DrawerContent backgroundColor='blue.500'>
+          <DrawerCloseButton colorScheme='blue' backgroundColor='blue.300' />
+          <DrawerHeader backgroundColor='blue.400'>
+            <Text color='white'>
+              {isLoadingUploader
+                ? 'Loading info...'
+                : `${displayLocation}, ${
+                    uploader?.displayName || 'Deleted User'
+                  }`}
+            </Text>
           </DrawerHeader>
           <DrawerBody>
             <Container maxWidth={['100%', , '80%']} paddingBottom='32px'>
@@ -108,6 +110,7 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
                 padding='16px'
                 shadow='lg'
                 rounded={16}
+                backgroundColor='whitesmoke'
               >
                 <Image
                   src={postData.url}
@@ -125,6 +128,7 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
                       isFullWidth
                       onClick={updateFavorites}
                       isLoading={isLoadingCurrentUser}
+                      colorScheme='blue'
                     >
                       {isAlreadyFavorite
                         ? 'Remove from Favorites'
@@ -138,6 +142,7 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
                         isFullWidth
                         onClick={deletePost}
                         isLoading={isLoadingCurrentUser}
+                        colorScheme='red'
                       >
                         Delete Post
                       </Button>
