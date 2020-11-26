@@ -29,18 +29,18 @@ export default function ImageBrick({ post, onClick }: ImageBrickProps) {
   return postData ? (
     <Image
       src={postData.url}
-      fallback={<Skeleton width='full' height='200px' />}
+      fallback={<Skeleton width='full' height='200px' rounded='8px' />}
       rounded='8px'
       cursor='pointer'
       onClick={onClick}
     />
   ) : (
-    <Skeleton isLoaded={!loading}>
+    <Skeleton isLoaded={!loading} rounded='8px'>
       <Center
         width='200px'
         height='250px'
         backgroundColor='cyan.300'
-        rounded='10px'
+        rounded='8px'
         onClick={deleteFavorite}
         cursor='pointer'
       >
