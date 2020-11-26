@@ -1,5 +1,3 @@
 https://ngabolang.netlify.app/
-https://ngabolang.netlify.app/upload
-https://ngabolang.netlify.app/favorites
 https://ngabolang.netlify.app/login
 https://ngabolang.netlify.app/register
