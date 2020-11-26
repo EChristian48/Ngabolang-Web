@@ -7,8 +7,7 @@ import {
   useToast,
   VStack,
 } from '@chakra-ui/react'
-import { LinkWrapper } from '@root/components'
-import AuthPage from '@root/components/AuthPage'
+import { AuthLayout, LinkWrapper } from '@root/components'
 import firebase from 'firebase/app'
 import { useInputHandler, useToggler } from 'molohooks'
 import { NextSeo } from 'next-seo'
@@ -52,7 +51,7 @@ const Login = () => {
     <>
       <NextSeo title='Sign In' />
 
-      <AuthPage>
+      <AuthLayout>
         <Flex
           alignItems='center'
           justifyContent='center'
@@ -110,7 +109,7 @@ const Login = () => {
             Don't Have an Account?
           </LinkWrapper>
         </Flex>
-      </AuthPage>
+      </AuthLayout>
     </>
   )
 }
