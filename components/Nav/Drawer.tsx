@@ -40,11 +40,13 @@ export default function CustomDrawer({
                   chakraProps={{ width: 'full' }}
                   key={label}
                 >
-                  <Button isFullWidth>{label}</Button>
+                  <Button colorScheme='blue' isFullWidth>
+                    {label}
+                  </Button>
                 </LinkWrapper>
               ))}
 
-              <Button isFullWidth onClick={logout}>
+              <Button colorScheme='red' isFullWidth onClick={logout}>
                 Logout
               </Button>
             </VStack>

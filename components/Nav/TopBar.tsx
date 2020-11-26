@@ -89,7 +89,7 @@ export default function TopBar({
           {isMediumScreen &&
             topMenus.map(({ href, label }) => (
               <LinkWrapper nextProps={{ href }} key={label}>
-                <Button>{label}</Button>
+                <Button colorScheme='blue'>{label}</Button>
               </LinkWrapper>
             ))}
           {pathname === '/' && (
