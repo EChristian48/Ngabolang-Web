@@ -5,6 +5,7 @@ export type User = Pick<
   'displayName' | 'email' | 'uid' | 'photoURL'
 > & {
   favorites: string[]
+  posts: number
 }
 
 export type Post = {
