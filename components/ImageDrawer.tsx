@@ -14,6 +14,7 @@ import {
   SimpleGrid,
   Skeleton,
   Text,
+  useToast,
   VStack,
 } from '@chakra-ui/react'
 import { Post, User } from '@root/data/types'
@@ -51,6 +52,8 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
     removeAlreadyFavorite,
   ] = useToggler()
 
+  const toast = useToast()
+
   function checkAlreadyFavorite() {
     if (currentUser.favorites.includes(post.id)) {
       setAlreadyFavorite()
@@ -79,6 +82,11 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
         }
 
     await firebase.firestore().collection('users').doc(uid).update(data)
+    toast({
+      title: 'Successfully updated favorites!',
+      isClosable: true,
+      status: 'success',
+    })
   }
 
   async function deletePost() {
@@ -86,6 +94,11 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
 
     refreshFunc()
     props.onClose()
+    toast({
+      title: 'Successfully deleted post.',
+      isClosable: true,
+      status: 'success',
+    })
   }
 
   return (

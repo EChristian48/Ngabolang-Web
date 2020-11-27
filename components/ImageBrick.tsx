@@ -1,7 +1,8 @@
-import { Center, Image, Skeleton, Text } from '@chakra-ui/react'
+import { Center, Image, Skeleton, Text, useToast } from '@chakra-ui/react'
 import { Post, User } from '@root/data/types'
 import useListenCurrentUser from '@root/hooks/useListenCurrentUser'
 import firebase from 'firebase/app'
+import { motion } from 'framer-motion'
 import { MouseEvent } from 'react'
 
 export type ImageBrickProps = {
@@ -13,6 +14,7 @@ export default function ImageBrick({ post, onClick }: ImageBrickProps) {
   const postData = post.data() as Post
 
   const [loading, user] = useListenCurrentUser()
+  const toast = useToast()
 
   async function deleteFavorite() {
     const { uid } = user
@@ -24,16 +26,24 @@ export default function ImageBrick({ post, onClick }: ImageBrickProps) {
     }
 
     await firebase.firestore().collection('users').doc(uid).update(data)
+    toast({
+      title: 'Removed from Favorites.',
+      description: 'Post no longer available.',
+      isClosable: true,
+      status: 'info',
+    })
   }
 
   return postData ? (
-    <Image
-      src={postData.url}
-      fallback={<Skeleton width='full' height='200px' rounded='8px' />}
-      rounded='8px'
-      cursor='pointer'
-      onClick={onClick}
-    />
+    <motion.div whileHover={{ scale: 1.03 }}>
+      <Image
+        src={postData.url}
+        fallback={<Skeleton width='full' height='200px' rounded='8px' />}
+        rounded='8px'
+        cursor='pointer'
+        onClick={onClick}
+      />
+    </motion.div>
   ) : (
     <Skeleton isLoaded={!loading} rounded='8px'>
       <Center
