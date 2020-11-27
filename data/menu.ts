@@ -9,6 +9,6 @@ export const topNavMenus: MenuType[] = [
   { href: '/nearyou', label: 'Near You' },
 ]
 
-export const profileMenus: MenuType[] = [{ href: '/upload', label: 'Upload' }]
+export const profileMenus: MenuType[] = [{ href: '/profile', label: 'Profile' }]
 
 export const drawerMenus: MenuType[] = [...topNavMenus, ...profileMenus]
