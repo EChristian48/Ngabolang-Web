@@ -76,7 +76,7 @@ export default function Favorites() {
             />
           ) : (
             <Text textAlign='center' fontSize='xl'>
-              Ups, favorites kamu kosong.
+              Oops, your favorite list is empty.
             </Text>
           )}
         </Container>
