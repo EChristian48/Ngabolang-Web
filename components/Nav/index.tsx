@@ -8,11 +8,7 @@ export default memo(function Nav() {
 
   return (
     <>
-      <TopBar
-        onMenuClick={openDrawer}
-        profileMenus={profileMenus}
-        topMenus={topNavMenus}
-      />
+      <TopBar onMenuClick={openDrawer} />
 
       <CustomDrawer
         isOpem={isDrawerOpen}
