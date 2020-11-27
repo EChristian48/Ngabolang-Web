@@ -1,6 +1,6 @@
-import { useToggler } from 'molohooks'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import { useToggler } from 'molohooks'
 import router from 'next/router'
 import { FC, useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
