@@ -49,7 +49,6 @@ export default function NearYou() {
   const [location, setLocation] = useState<GeolocationPosition>()
   const toast = useToast()
   const [permission, setPermission] = useState<PermissionState>()
-  const [isLoadingPermission, startLoading, stopLoading] = useToggler(true)
 
   const { isLoading, isError, isIdle, data: locations } = useQuery(
     [location?.coords.latitude, location?.coords.longitude],
@@ -65,7 +64,6 @@ export default function NearYou() {
       })
 
       setPermission(permission.state)
-      stopLoading()
     }
   }
 
@@ -92,9 +90,7 @@ export default function NearYou() {
 
       <Layout>
         <Container maxWidth='full' paddingY={4}>
-          {isLoadingPermission ? (
-            <Spinner />
-          ) : permission === 'denied' ? (
+          {permission === 'denied' ? (
             <Container maxWidth={['100%', , '80%']}>
               <Alert status='error'>
                 <AlertIcon />
@@ -144,7 +140,7 @@ export default function NearYou() {
                             <Heading size='lg'>{name}</Heading>
                             <LinkWrapper
                               nextProps={{
-                                href: getMapUrl(coordinates[0], coordinates[1]),
+                                href: getMapUrl(name),
                               }}
                             >
                               <Button

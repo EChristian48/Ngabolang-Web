@@ -14,7 +14,5 @@ export function getLocation(latitude: number, longitude: number) {
   })
 }
 
-export const getMapUrl = (lat: number, lon: number) =>
-  `https://www.google.com/maps/search//?api=1&query=${encodeURIComponent(
-    lat
-  )},${encodeURIComponent(lon)}`
+export const getMapUrl = (query: string) =>
+  `https://www.google.com/maps/search//?api=1&query=${encodeURIComponent(query)}`
