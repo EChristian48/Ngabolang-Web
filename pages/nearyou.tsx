@@ -1,33 +1,20 @@
 import {
   Alert,
-  AlertDescription,
   AlertIcon,
   AlertTitle,
-  Box,
   Button,
   Center,
-  Collapse,
-  Heading,
+  Container,
   SimpleGrid,
-  SlideFade,
-  Spinner,
-  Tag,
-  Text,
   useToast,
-  VStack,
-  Wrap,
-  WrapItem,
 } from '@chakra-ui/react'
-import { Layout, LinkWrapper } from '@root/components'
+import { getLocation as fetchLocation } from '@root/api/methods'
+import { Layout } from '@root/components'
+import LocationCard from '@root/components/LocationCard'
 import { NextSeo } from 'next-seo'
-import { Container } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { MdGpsFixed } from 'react-icons/md'
-import { useToggler } from 'molohooks'
 import { useQuery } from 'react-query'
-import { getLocation as fetchLocation, getMapUrl } from '@root/api/methods'
-import { AnimatePresence, motion } from 'framer-motion'
-import { FaGoogle, FaMapMarkedAlt } from 'react-icons/fa'
 
 type apiData = {
   id: string
@@ -90,14 +77,7 @@ export default function NearYou() {
 
       <Layout>
         <Container maxWidth='full' paddingY={4}>
-          {permission === 'denied' ? (
-            <Container maxWidth={['100%', , '80%']}>
-              <Alert status='error'>
-                <AlertIcon />
-                <AlertTitle>Location Permission Blocked!</AlertTitle>
-              </Alert>
-            </Container>
-          ) : (
+          {permission !== 'denied' ? (
             <>
               {!locations ? (
                 <Center width='full' paddingBottom={4}>
@@ -112,62 +92,26 @@ export default function NearYou() {
                 </Center>
               ) : (
                 <SimpleGrid columns={[1, , 2]} spacing={4}>
-                  {((locations.data.features as apiData[]) || []).map(
-                    ({
-                      id,
-                      properties: { dist, kinds, name },
-                      geometry: { coordinates },
-                    }) => {
-                      const cleanedKinds = kinds.split(',').map(kind =>
-                        kind
-                          .split('_')
-                          .map(
-                            word => `${word[0].toUpperCase()}${word.slice(1)}`
-                          )
-                          .join(' ')
-                      )
-
-                      return (
-                        <Box
-                          key={id}
-                          shadow='xl'
-                          backgroundColor='blue.700'
-                          color='white'
-                          padding={4}
-                          rounded={8}
-                        >
-                          <VStack>
-                            <Heading size='lg'>{name}</Heading>
-                            <LinkWrapper
-                              nextProps={{
-                                href: getMapUrl(name),
-                              }}
-                            >
-                              <Button
-                                colorScheme='blue'
-                                rightIcon={<FaMapMarkedAlt />}
-                              >
-                                Open in Maps
-                              </Button>
-                            </LinkWrapper>
-                            <Text>
-                              Distance: {Math.round(dist).toString()}m
-                            </Text>
-                            <Wrap>
-                              {cleanedKinds.map(kind => (
-                                <WrapItem>
-                                  <Tag key={kind}>{kind}</Tag>
-                                </WrapItem>
-                              ))}
-                            </Wrap>
-                          </VStack>
-                        </Box>
-                      )
-                    }
+                  {(locations.data.features as apiData[]).map(
+                    ({ id, properties: { dist, kinds, name } }) => (
+                      <LocationCard
+                        distance={dist}
+                        kinds={kinds}
+                        name={name}
+                        key={id}
+                      />
+                    )
                   )}
                 </SimpleGrid>
               )}
             </>
+          ) : (
+            <Container maxWidth={['100%', , '80%']}>
+              <Alert status='error'>
+                <AlertIcon />
+                <AlertTitle>Location Permission Blocked!</AlertTitle>
+              </Alert>
+            </Container>
           )}
         </Container>
       </Layout>
