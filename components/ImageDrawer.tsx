@@ -132,7 +132,7 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
                 />
 
                 <VStack align='start'>
-                  <HStack width='full'>
+                  <SimpleGrid columns={[1, , 2]} width='full' spacing={2} >
                     <Button
                       aria-label='Save to favorites'
                       leftIcon={
@@ -160,7 +160,7 @@ const ImageDrawer: FC<ImageDrawerProps> = props => {
                         Delete Post
                       </Button>
                     )}
-                  </HStack>
+                  </SimpleGrid>
 
                   <Heading size='lg'>Location: {displayLocation}</Heading>
                   {isLoadingUploader ? (
