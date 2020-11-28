@@ -10,7 +10,6 @@ export type User = Pick<
 
 export type Post = {
   url: string
-  thumbUrl: string
   location: string
   date: firebase.firestore.FieldValue | firebase.firestore.Timestamp
 } & Pick<User, 'uid'>
