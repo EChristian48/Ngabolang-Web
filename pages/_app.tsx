@@ -5,6 +5,9 @@ import { DefaultSeo } from 'next-seo'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 import { RecoilRoot } from 'recoil'
+import { ReactQueryCacheProvider, QueryCache } from 'react-query'
+
+const queryCache = new QueryCache()
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -21,7 +24,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
       <ChakraProvider>
         <RecoilRoot>
-          <Component {...pageProps} />
+          <ReactQueryCacheProvider queryCache={queryCache}>
+            <Component {...pageProps} />
+          </ReactQueryCacheProvider>
         </RecoilRoot>
       </ChakraProvider>
     </>

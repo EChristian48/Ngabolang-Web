@@ -14,6 +14,7 @@
     "@emotion/react": "^11.1.1",
     "@emotion/styled": "x",
     "ahooks": "^2.9.1",
+    "axios": "^0.21.0",
     "date-fns": "^2.16.1",
     "firebase": "x",
     "framer-motion": "^2.9.4",
@@ -26,6 +27,7 @@
     "react-dom": "17",
     "react-firebase-hooks": "^2.2.0",
     "react-icons": "x",
+    "react-query": "^2.26.3",
     "recoil": "x"
   },
   "devDependencies": {
