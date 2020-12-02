@@ -1,4 +1,5 @@
 import firebase from 'firebase/app'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 export type User = Pick<
   firebase.User,
@@ -9,6 +10,7 @@ export type User = Pick<
 }
 
 export type Post = {
+  thumbUrl?: string
   url: string
   location: string
   date: firebase.firestore.FieldValue | firebase.firestore.Timestamp
