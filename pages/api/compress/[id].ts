@@ -1,7 +1,7 @@
 import { Post } from '@root/data/types'
 import '@root/firebase/init-admin'
 import Cors from 'cors'
-import admin from 'firebase-admin'
+import * as admin from 'firebase-admin'
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import fetch from 'node-fetch'
 import os from 'os'
