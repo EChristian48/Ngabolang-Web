@@ -15,24 +15,33 @@
     "@emotion/styled": "x",
     "ahooks": "^2.9.1",
     "axios": "^0.21.0",
+    "cors": "^2.8.5",
     "date-fns": "^2.16.1",
     "firebase": "x",
+    "firebase-admin": "^9.4.1",
     "framer-motion": "^2.9.4",
+    "gm": "^1.23.1",
     "masonic": "x",
     "molohooks": "x",
     "next": "10.0.0",
     "next-on-netlify": "x",
     "next-seo": "^4.17.0",
+    "node-fetch": "^2.6.1",
     "react": "17",
     "react-dom": "17",
     "react-firebase-hooks": "^2.2.0",
     "react-icons": "x",
     "react-query": "^2.26.3",
-    "recoil": "x"
+    "recoil": "x",
+    "sharp": "^0.26.3"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.8",
+    "@types/gm": "^1.18.9",
     "@types/node": "^14.14.6",
+    "@types/node-fetch": "^2.5.7",
     "@types/react": "^16.9.55",
+    "@types/sharp": "^0.26.1",
     "typescript": "^4.0.5"
   }
 }
