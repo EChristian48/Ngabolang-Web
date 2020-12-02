@@ -17,6 +17,7 @@
     "axios": "^0.21.0",
     "cors": "^2.8.5",
     "date-fns": "^2.16.1",
+    "dotenv": "^8.2.0",
     "firebase": "x",
     "firebase-admin": "^9.4.1",
     "framer-motion": "^2.9.4",
