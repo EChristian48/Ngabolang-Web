@@ -37,7 +37,7 @@ export default function ImageBrick({ post, onClick }: ImageBrickProps) {
   return postData ? (
     <motion.div whileHover={{ scale: 1.03 }}>
       <Image
-        src={postData.url}
+        src={postData.thumbUrl || postData.url}
         fallback={<Skeleton width='full' height='200px' rounded='8px' />}
         rounded='8px'
         cursor='pointer'
