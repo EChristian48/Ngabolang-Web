@@ -74,6 +74,8 @@ const Upload: NextPage = () => {
         location: location.toUpperCase(),
         url: downloadUrl,
         date: firebase.firestore.FieldValue.serverTimestamp(),
+        thumbUrl:
+          'https://firebasestorage.googleapis.com/v0/b/ngabolang.appspot.com/o/posts%2Floading-indicator-view.jpg?alt=media&token=a6bdb1c8-6988-4fb4-b3c0-1029e823169f',
       }
 
       await firebase.firestore().collection('posts').add(post)
