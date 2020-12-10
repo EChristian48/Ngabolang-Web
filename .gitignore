@@ -2,6 +2,7 @@
 .firebase
 .env
 serviceAccount.json
+out_*
 
 # dependencies
 /node_modules
