@@ -19,7 +19,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           name='google-site-verification'
           content='jwuGaag6OVJJ8VNJa6euHdXW3AYBhR9ZXf4mgY1K6Zk'
         />
+        <meta name='dicoding:email' content='t.darmo.t@gmail.com' />
       </Head>
+
       <DefaultSeo {...seoConfig} />
 
       <ChakraProvider>
