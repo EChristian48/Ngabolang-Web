@@ -1,14 +1,10 @@
 import {
   Center,
   Container,
-  Editable,
-  EditableInput,
-  EditablePreview,
   Heading,
   HStack,
   Spinner,
   Text,
-  useEditableControls,
   VStack,
 } from '@chakra-ui/react'
 import { ImageBrick, ImageDrawer, Layout } from '@root/components'
